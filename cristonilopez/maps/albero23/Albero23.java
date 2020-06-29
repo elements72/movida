@@ -37,15 +37,15 @@ public class Albero23 implements Dizionario{
         }
         else{
             Nodo23 padre = searchPosition(key);                 
-            Foglia23 foglia = (Foglia23)padre.searchNode(key);  //Controllo se è presente una foglia con tale chiave
-            if(foglia == null || foglia.getKey().compareTo(key) != 0){                                  //Se non è presente aggiungo normalmente la nuova foglia
+            Foglia23 foglia = (Foglia23)padre.searchNode(key);          //Controllo se è presente una foglia con tale chiave
+            if(foglia == null || foglia.getKey().compareTo(key) != 0){  //Se non è presente aggiungo normalmente la nuova foglia
                 nNodi = nNodi+1;
                 Foglia23 nuovaFoglia = new Foglia23(info);
                 padre.addChild(nuovaFoglia);
-                if(padre.grado()>3)                   //Se il nostro nodo non è ancora saturo possiamo aggiungere un nuovo figlio
+                if(padre.grado()>3)                                      //Se il nostro nodo non è ancora saturo possiamo aggiungere un nuovo figlio
                     split(padre);
             }
-            else{                                               //Se è presente aggiorno solamente il valore
+            else{                                                        //Se è presente aggiorno solamente il valore
                 foglia.setInfo(info);
             }
         }
