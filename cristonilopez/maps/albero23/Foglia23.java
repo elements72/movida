@@ -9,27 +9,28 @@ import movida.cristonilopez.maps.Coppia;
 
 public class Foglia23 extends Nodo {
     public Coppia info; 
-    public String key;
 
-    public Foglia23(Coppia info, String key){
+    public Foglia23(Coppia info){
         this.padre = null;
         this.info = info;
-        this.key  = key;
     }
 
     @Override
     public boolean isLeaf() {
         return true;
     }
-    public Coppia getInfo() {
-        return info;
+    public Object getInfo() {
+        return info.getData();
     }
     @Override
     public String toString() {
-        return key;
+        return info.getKey();
     }
     @Override
     public String getKey() {
-        return key;
+        return info.key;
+    }
+    public void setInfo(Coppia info) {
+        this.info = info;
     }
 }
