@@ -1,4 +1,4 @@
-package movida.cristonilopez.comparators;
+package movida.cristonilopez.ordinamento.comparators;
 import movida.commons.Movie;
 import java.time.Year;
 import java.util.Comparator;
