@@ -17,22 +17,21 @@ public class Albero23 implements Dizionario{
      * @param key
      */
     public void insert(Object data, String key){
-        Coppia info = new Coppia(data, key);
         if(radice == null){                 //Controlliamo che il nostro albero non sia vuoto
             nNodi = nNodi + 1;
-            Foglia23 nuovaFoglia = new Foglia23(info);
+            Foglia23 nuovaFoglia = new Foglia23(new Coppia(data, key));
             radice = nuovaFoglia;
         }
         else if(radice instanceof Foglia23){
             if(radice.getKey().compareTo(key) == 0){    //Se la chiave è già presente aggiorno le informazioni
-                ((Foglia23)radice).setInfo(info);
+                ((Foglia23)radice).setInfo(data);
             }
             else{
                 nNodi = nNodi+1;
                 Nodo23 nuovaRadice = new Nodo23();
                 nuovaRadice.figli[0] = radice;
                 radice = nuovaRadice;
-                ((Nodo23)radice).addChild(new Foglia23(info));
+                ((Nodo23)radice).addChild(new Foglia23(new Coppia(data, key)));
             }
         }
         else{
@@ -40,13 +39,13 @@ public class Albero23 implements Dizionario{
             Foglia23 foglia = (Foglia23)padre.searchNode(key);          //Controllo se è presente una foglia con tale chiave
             if(foglia == null || foglia.getKey().compareTo(key) != 0){  //Se non è presente aggiungo normalmente la nuova foglia
                 nNodi = nNodi+1;
-                Foglia23 nuovaFoglia = new Foglia23(info);
+                Foglia23 nuovaFoglia = new Foglia23(new Coppia(data, key));
                 padre.addChild(nuovaFoglia);
                 if(padre.grado()>3)                                      //Se il nostro nodo non è ancora saturo possiamo aggiungere un nuovo figlio
                     split(padre);
             }
             else{                                                        //Se è presente aggiorno solamente il valore
-                foglia.setInfo(info);
+                foglia.setInfo(data);
             }
         }
     }
