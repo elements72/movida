@@ -9,9 +9,15 @@ public interface Dizionario {
 
     public void insert(Object element, String key);
 
-    public void delete(String key);
+    public boolean delete(String key);
 
     public Object search(String key);
+
+    /**
+     * Il metodo count fornisce il numero di elementi presenti nella struttura
+     * @return Numero di elementi presenti
+     */
+    public int count();
 
     /**
      * Il metodo permette di ottenere da un dizionario un Array con i dati inseriti

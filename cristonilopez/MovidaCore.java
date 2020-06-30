@@ -1,5 +1,6 @@
 package movida.cristonilopez;
 
+<<<<<<< HEAD
 import movida.commons.*;
 import movida.cristonilopez.maps.Dizionario;
 import movida.cristonilopez.maps.albero23.Albero23;
@@ -155,4 +156,8 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig {
         return null;
     }
     
+=======
+public class MovidaCore{
+
+>>>>>>> 8cadd4d20323955b5c685fce6613a3a2247f8af0
 }

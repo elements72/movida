@@ -30,7 +30,7 @@ public class Foglia23 extends Nodo {
     public String getKey() {
         return info.key;
     }
-    public void setInfo(Coppia info) {
-        this.info = info;
+    public void setInfo(Object info) {
+        this.info.data = info;
     }
 }

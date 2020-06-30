@@ -17,22 +17,21 @@ public class Albero23 implements Dizionario{
      * @param key
      */
     public void insert(Object data, String key){
-        Coppia info = new Coppia(data, key);
         if(radice == null){                 //Controlliamo che il nostro albero non sia vuoto
             nNodi = nNodi + 1;
-            Foglia23 nuovaFoglia = new Foglia23(info);
+            Foglia23 nuovaFoglia = new Foglia23(new Coppia(data, key));
             radice = nuovaFoglia;
         }
         else if(radice instanceof Foglia23){
             if(radice.getKey().compareTo(key) == 0){    //Se la chiave è già presente aggiorno le informazioni
-                ((Foglia23)radice).setInfo(info);
+                ((Foglia23)radice).setInfo(data);
             }
             else{
                 nNodi = nNodi+1;
                 Nodo23 nuovaRadice = new Nodo23();
                 nuovaRadice.figli[0] = radice;
                 radice = nuovaRadice;
-                ((Nodo23)radice).addChild(new Foglia23(info));
+                ((Nodo23)radice).addChild(new Foglia23(new Coppia(data, key)));
             }
         }
         else{
@@ -40,13 +39,13 @@ public class Albero23 implements Dizionario{
             Foglia23 foglia = (Foglia23)padre.searchNode(key);          //Controllo se è presente una foglia con tale chiave
             if(foglia == null || foglia.getKey().compareTo(key) != 0){  //Se non è presente aggiungo normalmente la nuova foglia
                 nNodi = nNodi+1;
-                Foglia23 nuovaFoglia = new Foglia23(info);
+                Foglia23 nuovaFoglia = new Foglia23(new Coppia(data, key));
                 padre.addChild(nuovaFoglia);
                 if(padre.grado()>3)                                      //Se il nostro nodo non è ancora saturo possiamo aggiungere un nuovo figlio
                     split(padre);
             }
             else{                                                        //Se è presente aggiorno solamente il valore
-                foglia.setInfo(info);
+                foglia.setInfo(data);
             }
         }
     }
@@ -56,17 +55,18 @@ public class Albero23 implements Dizionario{
      * "Chiave non presente".
      * @param key
      */
-    public void delete(String key){
+    public boolean delete(String key){
         if(radice == null){
-            System.out.println("Albero vuoto");
+            return false;
         }
         else if(radice instanceof Foglia23){
             if(key.compareTo(((Foglia23)radice).getKey()) == 0){
                 radice = null;
                 nNodi = 0;
+                return true;
             }
             else
-                System.out.println("Chiave assente");
+                return false;
         }
         else{
             Nodo23 nodo = searchPosition(key);
@@ -78,8 +78,7 @@ public class Albero23 implements Dizionario{
                     fixKeys(nodo.padre, key, nodo.getKey());
                 }
             } catch (ExceptionKeyNotFound e) {
-                System.out.println("Chiave assente");
-                return;
+                return false;
             }
             nNodi = nNodi - 1;
             if(nodo.grado()<2){
@@ -89,6 +88,7 @@ public class Albero23 implements Dizionario{
                     fuse(nodo);
                 }
             }
+            return true;
         }
     }
 
@@ -283,5 +283,9 @@ public class Albero23 implements Dizionario{
             System.out.println();
             System.out.println();
         } 
+    }
+
+    public int count(){
+        return nNodi;
     }
 }
