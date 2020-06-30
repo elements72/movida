@@ -12,12 +12,26 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig {
 
     SortingAlgorithm sort;
     MapImplementation map;
+    Dizionario movies;
+    Dizionario actors;
 
-    Dizionario struttura;
+    public MovidaCore(){
+        this.sort = SortingAlgorithm.InsertionSort;
+        this.map = MapImplementation.Alberi23;
+        this.movies = null;
+        this.actors = null;
+    }
 
     @Override
     public boolean setSort(SortingAlgorithm a) {
-        // TODO Auto-generated method stub
+        if(a != sort){
+            if(a == SortingAlgorithm.InsertionSort || a == SortingAlgorithm.HeapSort){
+                sort = a;
+                return true;
+            }
+            else
+                return false;
+        }
         return false;
     }
 
@@ -43,7 +57,8 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig {
         {
             throw new MovidaFileException();
         }
-        struttura = new Albero23(); //aggiungere controllo se esiste già na struttura e aggiungere selezione di struttura
+        //Aggiiungere controllo sul tipo di implementazione attiva
+        movies = new Albero23(); //aggiungere controllo se esiste già na struttura e aggiungere selezione di struttura
         boolean continua = true;
         while(continua)
         {
@@ -60,7 +75,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig {
             Movie result = new Movie(title, year, votes, cast, director);
 
             Test.stampa(result);
-            struttura.insert(result, title);
+            movies.insert(result, title);
             //far smaltire la riga vuota, TODO da sistemare
             if(!file.hasNextLine())
             {
