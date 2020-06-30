@@ -28,7 +28,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig {
     }
 
     @Override
-    public void loadFromFile(File f) {
+    public void loadFromFile(File f) { //TODO gestite le omonimie
         if(!f.exists())
         {
             throw new MovidaFileException();
@@ -43,7 +43,9 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig {
         {
             throw new MovidaFileException();
         }
+
         struttura = new Albero23(); //aggiungere controllo se esiste già na struttura e aggiungere selezione di struttura
+
         boolean continua = true;
         while(continua)
         {
