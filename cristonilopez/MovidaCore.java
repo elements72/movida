@@ -1,6 +1,5 @@
 package movida.cristonilopez;
 
-<<<<<<< HEAD
 import movida.commons.*;
 import movida.cristonilopez.maps.Dizionario;
 import movida.cristonilopez.maps.albero23.Albero23;
@@ -58,14 +57,8 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig {
         {
             throw new MovidaFileException();
         }
-<<<<<<< HEAD
-
-        struttura = new Albero23(); //aggiungere controllo se esiste già na struttura e aggiungere selezione di struttura
-
-=======
         //Aggiiungere controllo sul tipo di implementazione attiva
         movies = new Albero23(); //aggiungere controllo se esiste già na struttura e aggiungere selezione di struttura
->>>>>>> 330e819eb3904e29331020b9670a26ec3b4528e3
         boolean continua = true;
         while(continua)
         {
@@ -155,9 +148,5 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig {
         // TODO Auto-generated method stub
         return null;
     }
-    
-=======
-public class MovidaCore{
 
->>>>>>> 8cadd4d20323955b5c685fce6613a3a2247f8af0
 }
