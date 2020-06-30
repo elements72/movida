@@ -51,6 +51,19 @@ public class FileEngine {
             j = cast.indexOf(',', j+1);
             i++;
         }
+        //if(actors.search(nome) != null)  cerco la persona
+        //  Person[i] = actors.search(nome);
+        //else persona non present{
+        //  attore = new attore(nome)
+        //  actors.insert(attore, attore.name)
+        //  Person[i] = attore;
+        //  attore.setStarredMovie(new Dizionario(implementazione corrente))
+        //  }
+        // creo movie
+        // For each person in Person
+        // person.insertStarredFilm(movie)
+        // Stessa cosa va fatta per le persone che dirigono un film
+
         Person[] persone = new Person[i];
         j = 0;
         i = 0;
