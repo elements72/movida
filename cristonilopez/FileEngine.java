@@ -1,6 +1,7 @@
 package movida.cristonilopez;
 
 import movida.commons.*;
+import movida.cristonilopez.maps.*;
 import java.util.Scanner;
 
 public class FileEngine {
@@ -42,17 +43,33 @@ public class FileEngine {
      * @param file Scanner impostato sulla lettura da file
      * @return array di Person contenente tutti gli attori del film
      */
-    public static Person[] getCast(Scanner file) {
-        String cast = file.nextLine();
-        cast = cast.substring(cast.indexOf(' ')); //non gestisco il +1 perché lo gestisco direttamente nel ciclo
-        int i=0, j=0;
-        while(cast.indexOf(',', j+1) > 0) //non prevede che in un film ci sia solo un attore
+    public static Person[] getCast(Scanner file, Dizionario actors) {
+        try
         {
-            j = cast.indexOf(',', j+1);
-            i++;
-        }
+            String cast = file.nextLine();
+            cast = cast.substring(cast.indexOf(' ')); //non gestisco il +1 perché lo gestisco direttamente nel ciclo
+            int i= 1, j=0;
+            while(cast.indexOf(',', j+1) > 0)
+            {
+                j = cast.indexOf(',', j+1);
+                i++;
+            }
+        
+            Person[] persone = new Person[i];
+            j = 0;
+            for(i=0; i<persone.length; i++)  //TODO smaltire ultimo carattere neutro che l'ultimo attore potrebbe avere
+            {
+                int t = 0;                      //ci permette di leggere l'ultimo attore ( il caso in cui non abbiamo un'ultima virgola) 
+                if(cast.indexOf(',', j) < 0)
+                {
+                    t=cast.length();
+                }
+                else
+                {
+                    t=cast.indexOf(',', j);
+                }
         //if(actors.search(nome) != null)  cerco la persona
-        //  Person[i] = actors.search(nome);
+        //  Person[i] = actors.search(nome); preferisco salvarlo al posto di eseguire due volte un algoritmo di ricerca
         //else persona non present{
         //  attore = new attore(nome)
         //  actors.insert(attore, attore.name)
@@ -63,16 +80,30 @@ public class FileEngine {
         // For each person in Person
         // person.insertStarredFilm(movie)
         // Stessa cosa va fatta per le persone che dirigono un film
+                String name = cast.substring(j, t);
+                Object temp = actors.search(name);
+                if( temp != null)  //cerco la persona
+                {
+                    persone[i] = (Person)temp; //TODO controllare che non dia problemi di casting
+                }
+                else //l'attore non è ancora nel database
+                {
+                    Actor actor = new Actor(name);
+                    actors.insert(actor, name);
+                    persone[i] = actor;
+                    actor.setMoviesStarred(new Dizionario()); //implementare riga con creazione di dizionario del tipo selezionato
+                }
 
-        Person[] persone = new Person[i];
-        j = 0;
-        i = 0;
-        while(cast.indexOf(',', j+1) > 0)
-        {
-            persone[i++] = new Person(cast.substring(j+1, cast.indexOf(',', j+1)));
-            j = cast.indexOf(',', j+1);
-        }
-        return persone;
+                //persone[i] = new Person(cast.substring(j, t));
+                j = t + 1; //smaltisco la virgola di default, guarda dal carattere successivo
+
+            }
+         return persone;
+    }
+    catch (Exception e)
+    {
+        throw new MovidaFileException();
+    }
     }
 
     /**Ottiene il direttore
@@ -82,11 +113,23 @@ public class FileEngine {
      * @param fileScanner impostato sula lettura da file
      * @return Person contenente il direttore del film
      */
-    public static Person getDirector(Scanner file) { 
+    public static Person getDirector(Scanner file, Dizionario actors) { 
         try{
-        String directort = file.nextLine();
-        directort = directort.substring(directort.indexOf(' ')+1);
-        Person director = new Person(directort);
+        String directortemp = file.nextLine();
+        directortemp = directortemp.substring(directortemp.indexOf(' ')+1);
+        Object temp = actors.search(directortemp);
+        Person director;
+                if( temp != null)  //cerco la persona
+                {
+                    director = (Person)temp; //TODO controllare che non dia problemi di casting
+                }
+                else //l'attore non è ancora nel database
+                {
+                    Actor actor = new Actor(directortemp);
+                    actors.insert(actor, directortemp);
+                    director = actor;
+                    actor.setMoviesStarred(new Dizionario()); //implementare riga con creazione di dizionario del tipo selezionato
+                }
         return director;
         }
         catch (Exception e)

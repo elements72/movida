@@ -42,7 +42,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig {
     }
 
     @Override
-    public void loadFromFile(File f) { //TODO gestite le omonimie
+    public void loadFromFile(File f) {
         if(!f.exists())
         {
             throw new MovidaFileException();
@@ -66,13 +66,28 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig {
             
             Integer year = FileEngine.getYear(file);  //metodo dato che questi metodi non possono assolutamente essere 
             
-            Person director = FileEngine.getDirector(file);//autilizzati in un ordine diverso
+            Person director = FileEngine.getDirector(file, actors);//autilizzati in un ordine diverso
             
-            Person[] cast = FileEngine.getCast(file);
+            Person[] cast = FileEngine.getCast(file, actors);
 
             Integer votes = FileEngine.getVotes(file);
             
             Movie result = new Movie(title, year, votes, cast, director);
+
+            {
+                Actor temp = (Actor)result.getDirector();
+                temp.addDirected(result);
+            }
+
+            {
+                Actor[] temp = (Actor[])result.getCast();
+                for(Actor a : temp)
+                {
+                    a.addStarred(result);
+                }
+            }
+            // For each person in Person
+            // person.insertStarredFilm(movie)
 
             Test.stampa(result);
             movies.insert(result, title);
