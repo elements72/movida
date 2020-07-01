@@ -24,9 +24,9 @@ public class Nodo23 extends Nodo{
      */
 
     public Nodo searchNode(String key){
-        if(key.compareTo(this.keys[0]) <= 0)
+        if(key.compareToIgnoreCase(this.keys[0]) <= 0)
             return figli[0];
-        else if(keys[1] == null || key.compareTo(keys[1]) <= 0)
+        else if(keys[1] == null || key.compareToIgnoreCase(keys[1]) <= 0)
             return figli[1];
         else 
             return figli[2];
@@ -42,7 +42,7 @@ public class Nodo23 extends Nodo{
         boolean found = false;
         int grado = this.grado();
         while (!found && i < grado) {
-             if(((Foglia23)figli[i]).getKey().compareTo(key) == 0) 
+             if(((Foglia23)figli[i]).getKey().compareToIgnoreCase(key) == 0) 
                 found = true;
             else
                 i++;
@@ -125,7 +125,7 @@ public class Nodo23 extends Nodo{
                         if(foglia == null){
                             figli[i] = nodo;
                         }
-                        else if (key.compareTo(foglia.getKey()) < 0) {    //Confrontiamo il suo valore con quello della nuova foglia
+                        else if (key.compareToIgnoreCase(foglia.getKey()) < 0) {    //Confrontiamo il suo valore con quello della nuova foglia
                             keys[i] = key;                      //Se è maggiore la spostiamo in avanti e inseriamo come chiave il valore                                          //della nostra nuova foglia
                             figli[i+1] = figli[i];              //della nostra nuova foglia
                             figli[i] = nodo;
@@ -140,7 +140,7 @@ public class Nodo23 extends Nodo{
                         if (figli[i] == null){                  //Inserimento per nodi vuoti
                             figli[i] = nodo;                    
                         }
-                        else if(figli[i].getKey().compareTo(key) <= 0){ //Decidiamo la posizione del nuovo nodo e la chiave separatrice
+                        else if(figli[i].getKey().compareToIgnoreCase(key) <= 0){ //Decidiamo la posizione del nuovo nodo e la chiave separatrice
                             keys[i] = figli[i].getKey();
                             figli[i+1] = nodo;
                         }
@@ -152,7 +152,7 @@ public class Nodo23 extends Nodo{
                         break;
                     }
                 }
-                else if(keys[i].compareTo(key) > 0){                    //Se la chiave legata la nodo/foglia è minore di una già presente in keys
+                else if(keys[i].compareToIgnoreCase(key) > 0){                    //Se la chiave legata la nodo/foglia è minore di una già presente in keys
                     //Shift di figli e chiavi                           //Eseguo uno shift verso destra di chiavi e figli    
                     int j;
                     for( j = this.grado(); j>i; j--){
@@ -176,7 +176,7 @@ public class Nodo23 extends Nodo{
      */
     public void updateKey(String oldKey, String newKey){
         for (int i = 0; i < this.grado()-1; i++) {
-            if(keys[i].compareTo(oldKey) == 0){
+            if(keys[i].compareToIgnoreCase(oldKey) == 0){
                 keys[i] = newKey;
                 break;
             }

@@ -10,6 +10,7 @@ import movida.commons.Movie;
 
 public class CompareVote implements Comparator<Movie> {
 
+    @Override
     public int compare(Movie m1, Movie m2) {
         int result = m1.getVotes().compareTo(m2.getVotes());
         if (result < 0)
