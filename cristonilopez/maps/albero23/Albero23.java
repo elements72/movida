@@ -37,7 +37,7 @@ public class Albero23 implements Dizionario{
         else{
             Nodo23 padre = searchPosition(key);                 
             Foglia23 foglia = (Foglia23)padre.searchNode(key);          //Controllo se è presente una foglia con tale chiave
-            if(foglia == null || foglia.getKey().compareTo(key) != 0){  //Se non è presente aggiungo normalmente la nuova foglia
+            if(foglia == null || foglia.getKey().compareToIgnoreCase(key) != 0){  //Se non è presente aggiungo normalmente la nuova foglia
                 nNodi = nNodi+1;
                 Foglia23 nuovaFoglia = new Foglia23(new Coppia(data, key));
                 padre.addChild(nuovaFoglia);
@@ -60,7 +60,7 @@ public class Albero23 implements Dizionario{
             return false;
         }
         else if(radice instanceof Foglia23){
-            if(key.compareTo(((Foglia23)radice).getKey()) == 0){
+            if(key.compareToIgnoreCase(((Foglia23)radice).getKey()) == 0){
                 radice = null;
                 nNodi = 0;
                 return true;
@@ -74,7 +74,7 @@ public class Albero23 implements Dizionario{
             //Gestisco chiave non è presente
             try {
                 nodo.deleteChild(key);
-                if (max.compareTo(key) == 0) {
+                if (max.compareToIgnoreCase(key) == 0) {
                     fixKeys(nodo.padre, key, nodo.getKey());
                 }
             } catch (ExceptionKeyNotFound e) {
@@ -96,13 +96,13 @@ public class Albero23 implements Dizionario{
         if(radice == null)
             return null;
         else if(radice instanceof Foglia23)
-            if(radice.getKey().compareTo(key) == 0)
+            if(radice.getKey().compareToIgnoreCase(key) == 0)
                 return ((Foglia23)radice).getInfo();
             else
                 return null;
         else{
             Nodo foglia =  searchPosition(key).searchNode(key);
-            if(foglia.getKey().compareTo(key) == 0)
+            if(foglia.getKey().compareToIgnoreCase(key) == 0)
                 return ((Foglia23)foglia).getInfo();
             else
                 return null;

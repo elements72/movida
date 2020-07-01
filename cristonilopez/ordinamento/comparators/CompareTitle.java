@@ -11,6 +11,7 @@ import movida.commons.Movie;
 
 public class CompareTitle implements Comparator<Movie>{
 
+    @Override
     public int compare(Movie m1, Movie m2){
         int result = m1.getTitle().compareToIgnoreCase(m2.getTitle());
         if(result < 0)
