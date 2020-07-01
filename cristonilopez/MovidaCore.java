@@ -212,7 +212,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
             if(movie.getYear().compareTo(year) == 0)
                 inYear.add(movie);
         }      
-        return null;
+        return (Movie[])inYear.toArray();
     }
 
     /**
