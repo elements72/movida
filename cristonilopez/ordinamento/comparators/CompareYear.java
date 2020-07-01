@@ -11,6 +11,7 @@ import java.util.Comparator;
 
 public class CompareYear implements Comparator<Movie>{
 
+    @Override
     public int compare(Movie m1, Movie m2){
         Year firstYear = Year.of(m1.getYear());
         Year secondYear = Year.of(m2.getYear());
