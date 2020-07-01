@@ -71,8 +71,8 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
         {
             throw new MovidaFileException();
         }
-        //Aggiiungere controllo sul tipo di implementazione attiva
-        movies = new Albero23(); //aggiungere controllo se esiste già na struttura e aggiungere selezione di struttura
+        movies = createDizionario();
+        actors = createDizionario();
         boolean continua = true;
         while(continua)
         {
@@ -90,18 +90,24 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
 
             {
                 Actor temp = (Actor)result.getDirector();
+                if(temp.getMoviesDirected() == null)
+                {
+                    temp.setMoviesDirected(createDizionario()); //deve farlo solo se non ha già una moviesDirrrrrrrrected
+                }
                 temp.addDirected(result);
             }
 
             {
-                Actor[] temp = (Actor[])result.getCast();
-                for(Actor a : temp)
+                for(Person p : result.getCast())
                 {
+                    Actor a = (Actor) p;
+                    if(a.getMoviesStarred() == null)
+                    {
+                        a.setMoviesStarred(createDizionario()); //deve farlo solo se non ha gia una  moviesStarrred
+                    }
                     a.addStarred(result);
                 }
             }
-            // For each person in Person
-            // person.insertStarredFilm(movie)
 
             Test.stampa(result);
             movies.insert(result, title);

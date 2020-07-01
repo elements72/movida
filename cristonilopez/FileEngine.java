@@ -68,19 +68,7 @@ public class FileEngine {
                 {
                     t=cast.indexOf(',', j);
                 }
-        //if(actors.search(nome) != null)  cerco la persona
-        //  Person[i] = actors.search(nome); preferisco salvarlo al posto di eseguire due volte un algoritmo di ricerca
-        //else persona non present{
-        //  attore = new attore(nome)
-        //  actors.insert(attore, attore.name)
-        //  Person[i] = attore;
-        //  attore.setStarredMovie(new Dizionario(implementazione corrente))
-        //  }
-        // creo movie
-        // For each person in Person
-        // person.insertStarredFilm(movie)
-        // Stessa cosa va fatta per le persone che dirigono un film
-                String name = cast.substring(j, t);
+                String name = cast.substring(j, t).trim();
                 Object temp = actors.search(name);
                 if( temp != null)  //cerco la persona
                 {
@@ -91,7 +79,6 @@ public class FileEngine {
                     Actor actor = new Actor(name);
                     actors.insert(actor, name);
                     persone[i] = actor;
-                    actor.setMoviesStarred(new Dizionario()); //implementare riga con creazione di dizionario del tipo selezionato
                 }
 
                 //persone[i] = new Person(cast.substring(j, t));
@@ -116,24 +103,24 @@ public class FileEngine {
     public static Person getDirector(Scanner file, Dizionario actors) { 
         try{
         String directortemp = file.nextLine();
-        directortemp = directortemp.substring(directortemp.indexOf(' ')+1);
-        Object temp = actors.search(directortemp);
+        directortemp = directortemp.substring(directortemp.indexOf(' ')+1).trim();
+        Object temp = actors.search(directortemp); //cerco la persona
         Person director;
-                if( temp != null)  //cerco la persona
+                if( temp != null)  //la persona è stata trovata e la linko
                 {
-                    director = (Person)temp; //TODO controllare che non dia problemi di casting
+                    director = (Person)temp; 
                 }
                 else //l'attore non è ancora nel database
                 {
                     Actor actor = new Actor(directortemp);
                     actors.insert(actor, directortemp);
                     director = actor;
-                    actor.setMoviesStarred(new Dizionario()); //implementare riga con creazione di dizionario del tipo selezionato
                 }
         return director;
         }
         catch (Exception e)
         {
+            System.out.println("ciao "+e.getMessage());
             throw new MovidaFileException();
         }
     }
