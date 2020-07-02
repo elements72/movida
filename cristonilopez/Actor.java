@@ -10,8 +10,8 @@ import movida.cristonilopez.maps.Dizionario;
  */
 
 public class Actor extends Person{
-    Dizionario moviesDirected; //inglese errato, directedMovies
-    Dizionario moviesStarred;   //inglese errato, starredMovies
+    Dizionario<Movie> moviesDirected; //inglese errato, directedMovies
+    Dizionario<Movie> moviesStarred;   //inglese errato, starredMovies
 
     public Actor(String name){
         super(name);
@@ -20,14 +20,14 @@ public class Actor extends Person{
      * Assegna a un attore l'elenco dei film da lui diretti
      * @param movieDirected
      */
-    public void setMoviesDirected(Dizionario moviesDirected) {
+    public void setMoviesDirected(Dizionario<Movie> moviesDirected) {
         this.moviesDirected = moviesDirected;
     }
     /**
      * Assegna a un attore l'elenco dei fil a cui ha preso parte
      * @param movieTakePart
      */
-    public void setMoviesStarred(Dizionario moviesStarred) {
+    public void setMoviesStarred(Dizionario<Movie> moviesStarred) {
         this.moviesStarred = moviesStarred;
     }
     /**

@@ -43,7 +43,7 @@ public class FileEngine {
      * @param file Scanner impostato sulla lettura da file
      * @return array di Person contenente tutti gli attori del film
      */
-    public static Person[] getCast(Scanner file, Dizionario actors) {
+    public static Person[] getCast(Scanner file, Dizionario<Actor> actors) {
         try
         {
             String cast = file.nextLine();
@@ -100,7 +100,7 @@ public class FileEngine {
      * @param fileScanner impostato sula lettura da file
      * @return Person contenente il direttore del film
      */
-    public static Person getDirector(Scanner file, Dizionario actors) { 
+    public static Person getDirector(Scanner file, Dizionario<Actor> actors) { 
         try{
         String directortemp = file.nextLine();
         directortemp = directortemp.substring(directortemp.indexOf(' ')+1).trim();

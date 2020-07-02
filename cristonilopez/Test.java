@@ -1,14 +1,20 @@
 package movida.cristonilopez;
 
 import java.io.File;
+import java.util.Arrays;
+
 import movida.commons.*;
 
 public class Test {
     
     public static void main(String[] args) {
-        File f = new File("/home/davide/github/movida/commons/esempio-formato-dati.txt");
+        File f = new File("/home/antonio/Scrivania/ProgettoAlgoritmi/movida/commons/esempio-formato-dati.txt");
         MovidaCore core = new MovidaCore();
         core.loadFromFile(f);
+        for (Movie string : core.searchMostVotedMovies(100)) {
+            System.out.println(string.getVotes());
+        }
+        System.out.println(core.getMovieByTitle("Pulp Fiction").getDirector().getName());
     }
         
     public static void stampa(Movie m){

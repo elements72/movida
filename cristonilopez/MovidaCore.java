@@ -19,8 +19,8 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
 
     SortingAlgorithm sort;
     MapImplementation map;
-    Dizionario movies;
-    Dizionario actors;
+    Dizionario<Movie> movies;
+    Dizionario<Actor> actors;
 
     public MovidaCore(){
         this.sort = SortingAlgorithm.InsertionSort;
@@ -29,9 +29,9 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
         this.actors = null;
     }
 
-    protected Dizionario createDizionario(){
+    protected <T> Dizionario<T> createDizionario(Class<T> c){
         if(map == MapImplementation.Alberi23)
-            return new Albero23();
+            return new Albero23<T>(c);
         else
             return null; //TODO aggiungere array ordinato
     }
@@ -71,8 +71,8 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
         {
             throw new MovidaFileException();
         }
-        movies = createDizionario();
-        actors = createDizionario();
+        movies = createDizionario(Movie.class);
+        actors = createDizionario(Actor.class);
         boolean continua = true;
         while(continua)
         {
@@ -92,7 +92,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
                 Actor temp = (Actor)result.getDirector();
                 if(temp.getMoviesDirected() == null)
                 {
-                    temp.setMoviesDirected(createDizionario()); //deve farlo solo se non ha già una moviesDirrrrrrrrected
+                    temp.setMoviesDirected(createDizionario(Movie.class)); //deve farlo solo se non ha già una moviesDirrrrrrrrected
                 }
                 temp.addDirected(result);
             }
@@ -103,7 +103,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
                     Actor a = (Actor) p;
                     if(a.getMoviesStarred() == null)
                     {
-                        a.setMoviesStarred(createDizionario()); //deve farlo solo se non ha gia una  moviesStarrred
+                        a.setMoviesStarred(createDizionario(Movie.class)); //deve farlo solo se non ha gia una  moviesStarrred
                     }
                     a.addStarred(result);
                 }
@@ -159,22 +159,22 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
 
     @Override
     public Movie getMovieByTitle(String title) {
-        return (Movie)movies.search(title);
+        return movies.search(title);
     }
 
     @Override
     public Person getPersonByName(String name) {
-        return (Person)actors.search(name);
+        return actors.search(name);
     }
 
     @Override
     public Movie[] getAllMovies() {
-        return (Movie[]) movies.toArray();
+        return  movies.toArray();
     }
 
     @Override
     public Person[] getAllPeople() {
-        return (Person[])actors.toArray();
+        return actors.toArray();
     }
 
     @Override
@@ -190,7 +190,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
 
     @Override
     public Person[] searchMostActiveActors(Integer N) {
-        Person[] A = getAllPeople();
+        Actor[] A = (Actor[])getAllPeople();
         return (Person[])ordina(A, N, new CompareActiveActor());
     }
 
@@ -244,7 +244,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
      * @param c Comparator
      * @return  Array di lunghezza N ordinato secondo <code>c</code>
      */
-    protected Object[] ordina(Object[] A, Integer N, Comparator c){
+    protected <T> Object[] ordina(T[] A, Integer N, Comparator<T> c){
         if (N > A.length) // Se N è maggiore del numero di film a disposizione, andiamo ad elencarli tutti
             N = A.length;
         Object[] most;
@@ -254,7 +254,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
             // TODO richiamo all'heap sort (hint per Davide l'heap sort dopo N delete max ha
             // finito (vedi heapselect))
         }
-        most = Arrays.copyOfRange(A, 0, N - 1); // Copio gli N elementi con voti maggiori
+        most = Arrays.copyOfRange(A, 0, N); // Copio gli N elementi con voti maggiori
         return most;
     }
 

@@ -10,10 +10,10 @@ public class InsertionSort {
      * @param A
      * @param c
      */
-    public static void sort(Object[] A, Comparator c){
+    public static<T> void sort(T[] A, Comparator<T> c){
         for (int i = 1; i < A.length; i++) {
             int j = i-1;
-            Object tmp;
+            T tmp;
             while(j >= 0 && c.compare(A[j+1], A[j]) < 0){
                 tmp = A[j+1];
                 A[j+1] = A[j];
