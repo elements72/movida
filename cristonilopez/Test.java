@@ -6,15 +6,45 @@ import java.util.Arrays;
 import movida.commons.*;
 
 public class Test {
-    
+    static MovidaCore core;
+
     public static void main(String[] args) {
-        File f = new File("/home/antonio/Scrivania/ProgettoAlgoritmi/movida/commons/esempio-formato-dati.txt");
-        MovidaCore core = new MovidaCore();
+        File f = new File("movida/commons/esempio-formato-dati.txt");   //cammino relativo
+        core = new MovidaCore();
         core.loadFromFile(f);
-        for (Movie string : core.searchMostVotedMovies(100)) {
-            System.out.println(string.getVotes());
-        }
-        System.out.println(core.getMovieByTitle("Pulp Fiction").getDirector().getName());
+        tests();    //Funzione con vari test
+
+
+    }
+
+    public static void tests(){
+        String searchActor = "Uma thurman";
+        String searchDirector = "Fabio il fruttivendolo";
+        String searchMovie = "Cape Fear	";
+        String searchString = "Force";
+        Integer anno = new Integer(1997);
+        int N = 20;
+        // Tutti i test sulle varie funzioni, commentare se necessario o aggiungerne
+        // altri
+        // Mancano set map, setAlgo, clear, save,
+        System.out.println("Count movie:" + core.countMovies() + "\n");
+        System.out.println("Count people:" + core.countPeople() + "\n");
+        System.out.println("All movies:" + Arrays.toString(core.getAllMovies()) + "\n");
+        System.out.println("All actors:" + Arrays.toString(core.getAllPeople()) + "\n");
+        System.out.println("Cerca persona:" + searchActor + core.getPersonByName(searchActor) + "\n");
+        System.out.println("Cerca film: " + searchString + core.getMovieByTitle(searchString) + "\n");
+        System.out.println("Cerca film in cui ha recitato: " + searchActor
+                + Arrays.toString(core.searchMoviesStarredBy(searchActor)) + "\n");
+        System.out.println("Film diretti da: " + searchDirector
+                + Arrays.toString(core.searchMoviesDirectedBy(searchDirector)) + "\n");
+        System.out.println("Film usciti il: " + anno + Arrays.toString(core.searchMoviesInYear(anno)) + "\n");
+        System.out.println("Attori più attivi:" + Arrays.toString(core.searchMostActiveActors(N)) + "\n");
+        System.out.println(N + " Film più recenti:" + Arrays.toString(core.searchMostRecentMovies(N)) + "\n");
+        System.out.println(N + " Film più votati:" + Arrays.toString(core.searchMostVotedMovies(N)) + "\n");
+        System.out.println("Film contenenti la stringa:" + searchString
+                + Arrays.toString(core.searchMoviesByTitle(searchString)) + "\n");
+        System.out.println("Elimino il film:" + searchMovie + " " + core.deleteMovieByTitle(searchMovie) + "\n");
+
     }
         
     public static void stampa(Movie m){

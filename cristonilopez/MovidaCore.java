@@ -49,9 +49,33 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
         return false;
     }
 
-    @Override
+    @Override   //TODO da testare
     public boolean setMap(MapImplementation m) {
-        // TODO Auto-generated method stub
+        if(m != map){
+            if(m == MapImplementation.Alberi23 || m == MapImplementation.ArrayOrdinato){
+                map = m;                                                        //Modifichiamo il tipo di dizionario usato
+                Dizionario<Actor> newActors = createDizionario(Actor.class);    //Creiamo il nuovo dizionario
+                Dizionario<Movie> newMovies = createDizionario(Movie.class);    //Creiamo il nuovo dizionario
+                for (Movie movie: getAllMovies()) {                             //Inseriamo i film nel nuovo dizionario
+                    newMovies.insert(movie, movie.getTitle());
+                }
+                for (Person actor: getAllPeople()) {                            
+                    Dizionario<Movie> newStarredMovies = createDizionario(Movie.class);     //Cambio l'implementazione anche dei dizionari usati negli attori
+                    Dizionario<Movie> newDirectedMovies = createDizionario(Movie.class);
+                    for (Movie movie : ((Actor)actor).getMoviesStarred()) {                 //Modifica per i film in cui l'attore ha recitato
+                        newStarredMovies.insert(movie, movie.getTitle());
+                    }
+                    ((Actor)actor).setMoviesStarred(newStarredMovies);          // Assegno il nuovo dizionario
+                    for (Movie movie : ((Actor)actor).getMoviesDirected()) {    // Modifica per i film diretti
+                        newDirectedMovies.insert(movie, movie.getTitle());
+                    }
+                    ((Actor)actor).setMoviesDirected(newDirectedMovies);
+                    newActors.insert(((Actor)actor), actor.getName());          //Assegno il nuovo dizionario
+                }
+                movies = newMovies;// Assegno il nuovo dizionario
+                actors = newActors;// Assegno il nuovo dizionario
+            }
+        }
         return false;
     }
 
@@ -152,8 +176,30 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
         return actors.count();
     }
 
+    /**
+     * La funzione elimina un attore se questo non è presente in alcun film
+     * @param actor
+     * @return true se l'attore è  stato eliminato
+     */
+    protected boolean tryDeleteActor(Actor actor){
+        if (actor.countMoviesDirected() == 0 && actor.countMoviesStarred() == 0)
+            return actors.delete(actor.getName());
+        else
+            return false;
+    }
+
     @Override
     public boolean deleteMovieByTitle(String title) {
+        Movie m = movies.search(title);
+        if(m != null){
+            for (Person actor : m.getCast()){               //Elimino da tutte le persone del cast tale film
+                ((Actor)actor).deleteMoviesStarred(title);
+                tryDeleteActor(((Actor) actor));
+            }
+            Actor director = (Actor)m.getDirector();        //Elimino dal direttore tale film
+            director.deleteMoviesDirected(title);
+            tryDeleteActor(director);                       //Se l'attore non è presente in alcun film lo elimino
+        }
         return movies.delete(title);
     }
 
@@ -180,18 +226,18 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
     @Override
     public Movie[] searchMostVotedMovies(Integer N) {
         Movie[] arrayMovie = getAllMovies(); 
-        return (Movie[])ordina(arrayMovie, N, new CompareVote());
+        return (Movie[])ordina(arrayMovie, N, new CompareVote().reversed());
     }
     @Override
     public Movie[] searchMostRecentMovies(Integer N) {
         Movie[] arrayMovie = getAllMovies();
-        return (Movie[])ordina(arrayMovie, N, new CompareYear());
+        return (Movie[])ordina(arrayMovie, N, new CompareYear().reversed());
     }
 
     @Override
     public Person[] searchMostActiveActors(Integer N) {
         Actor[] A = (Actor[])getAllPeople();
-        return (Person[])ordina(A, N, new CompareActiveActor());
+        return (Person[])ordina(A, N, new CompareActiveActor().reversed());
     }
 
     @Override
@@ -201,7 +247,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
             return actor.getMoviesStarred();
         }
         else
-            return null;
+            return new Movie[0];
     }
 
     @Override
@@ -210,7 +256,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
         if (actor != null) {
             return actor.getMoviesDirected();
         } else
-            return null;        
+            return new Movie[0];        
     }
 
     @Override
@@ -222,7 +268,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
             if(movieTitle.length() > title.length() && movieTitle.contains(title))  //Controllo se title è contenuto
                 containsTitle.add(movie);       //Aggiungo alla lista
         }
-        return (Movie[])containsTitle.toArray();
+        return containsTitle.toArray(new Movie[containsTitle.size()]);
     }
 
     @Override
@@ -233,7 +279,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
             if(movie.getYear().compareTo(year) == 0)
                 inYear.add(movie);
         }      
-        return (Movie[])inYear.toArray();
+        return inYear.toArray(new Movie[inYear.size()]);
     }
 
     /**
@@ -244,10 +290,10 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
      * @param c Comparator
      * @return  Array di lunghezza N ordinato secondo <code>c</code>
      */
-    protected <T> Object[] ordina(T[] A, Integer N, Comparator<T> c){
+    protected <T> T[] ordina(T[] A, Integer N, Comparator<T> c){
         if (N > A.length) // Se N è maggiore del numero di film a disposizione, andiamo ad elencarli tutti
             N = A.length;
-        Object[] most;
+        T[] most;
         if (sort == SortingAlgorithm.InsertionSort) {
             InsertionSort.sort(A, c);
         } else {

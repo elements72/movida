@@ -14,7 +14,7 @@ public class InsertionSort {
         for (int i = 1; i < A.length; i++) {
             int j = i-1;
             T tmp;
-            while(j >= 0 && c.compare(A[j+1], A[j]) < 0){
+            while(j >= 0 && c.compare(A[j], A[j+1]) > 0){
                 tmp = A[j+1];
                 A[j+1] = A[j];
                 A[j] = tmp;

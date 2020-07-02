@@ -232,10 +232,9 @@ public class Albero23<T> implements Dizionario<T>{
 
     public T[] toArray(){
         T[] A = null;
-        if(nNodi != 0){
-            A = (T[]) Array.newInstance(parameterClass, nNodi);
+        A = (T[]) Array.newInstance(parameterClass, nNodi);
+        if(nNodi != 0)
             toArrayRec(radice, A, 0);
-        }
         return A;
     }
 
