@@ -20,7 +20,7 @@ public class Test {
     public static void tests(){
         String searchActor = "Uma thurman";
         String searchDirector = "Fabio il fruttivendolo";
-        String searchMovie = "Cape Fear	";
+        String searchMovie = "Cape Fear";
         String searchString = "Force";
         Integer anno = new Integer(1997);
         int N = 20;
@@ -43,7 +43,7 @@ public class Test {
         System.out.println(N + " Film più votati:" + Arrays.toString(core.searchMostVotedMovies(N)) + "\n");
         System.out.println("Film contenenti la stringa:" + searchString
                 + Arrays.toString(core.searchMoviesByTitle(searchString)) + "\n");
-        System.out.println("Elimino il film:" + searchMovie + " " + core.deleteMovieByTitle(searchMovie) + "\n");
+        System.out.println("Elimino il film:" + searchMovie + " -> " + core.deleteMovieByTitle(searchMovie) + "\n");
 
     }
         
