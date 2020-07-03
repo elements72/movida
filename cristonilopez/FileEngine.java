@@ -57,7 +57,7 @@ public class FileEngine {
         
             Person[] persone = new Person[i];
             j = 0;
-            for(i=0; i<persone.length; i++)  //TODO smaltire ultimo carattere neutro che l'ultimo attore potrebbe avere
+            for(i=0; i<persone.length; i++)  
             {
                 int t = 0;                      //ci permette di leggere l'ultimo attore ( il caso in cui non abbiamo un'ultima virgola) 
                 if(cast.indexOf(',', j) < 0)
@@ -68,11 +68,12 @@ public class FileEngine {
                 {
                     t=cast.indexOf(',', j);
                 }
-                String name = cast.substring(j, t).trim();
+                String name = cast.substring(j, t);
+                name = fromTabToSpace(name).trim();
                 Object temp = actors.search(name);
                 if( temp != null)  //cerco la persona
                 {
-                    persone[i] = (Person)temp; //TODO controllare che non dia problemi di casting
+                    persone[i] = (Person)temp; 
                 }
                 else //l'attore non è ancora nel database
                 {
@@ -103,7 +104,8 @@ public class FileEngine {
     public static Person getDirector(Scanner file, Dizionario<Actor> actors) { 
         try{
         String directortemp = file.nextLine();
-        directortemp = directortemp.substring(directortemp.indexOf(' ')+1).trim();
+        directortemp = directortemp.substring(directortemp.indexOf(' ')+1);
+        directortemp = fromTabToSpace(directortemp).trim();
         Object temp = actors.search(directortemp); //cerco la persona
         Person director;
                 if( temp != null)  //la persona è stata trovata e la linko
@@ -120,7 +122,6 @@ public class FileEngine {
         }
         catch (Exception e)
         {
-            System.out.println("ciao "+e.getMessage());
             throw new MovidaFileException();
         }
     }
@@ -165,6 +166,7 @@ public class FileEngine {
         {
         String title = file.nextLine();
         title = title.substring(title.indexOf(' ')+1);
+        title = fromTabToSpace(title).trim();
         return title; //TODO tagliare la strnga dopo il nome del film per rimuovere qualsiasi cosa ci sia dopo che non ci interessa
         }
         catch (Exception e)
@@ -173,4 +175,13 @@ public class FileEngine {
         }
     }
 
+    private static String fromTabToSpace(String st){
+        int tabIndex;
+        do{
+            tabIndex = st.indexOf('\t');
+            if(tabIndex > 0)
+                st = st.replace('\t', ' ');
+        }while(tabIndex > 0);
+        return st;
+    }
 }

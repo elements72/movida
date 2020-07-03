@@ -80,7 +80,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
     }
 
     @Override
-    public void loadFromFile(File f) {
+    public void loadFromFile(File f) { //TODO aggiungere struttura di appoggio che viene creata durante la lettura e viene accorpata se e solo se il file è formattato bene
         if(!f.exists())
         {
             throw new MovidaFileException();
@@ -95,8 +95,18 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
         {
             throw new MovidaFileException();
         }
-        movies = createDizionario(Movie.class);
+
+        if(movies == null)
+        {
+            movies = createDizionario(Movie.class);
+        }
+        if(actors == null)
+        {
         actors = createDizionario(Actor.class);
+        } //TODO implementare le strutture di appoggio per verifia formattazione file
+        Dizionario<Movie> tempMovie = createDizionario(Movie.class); //se posso, clono la struttura normale, modifico a temporanea e se non incontro errori la sosituisco
+        Dizionario<Actor> tempActors = createDizionario(Actor.class);
+        //tempActors = clona actors;
         boolean continua = true;
         while(continua)
         {
@@ -114,9 +124,9 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
 
             {
                 Actor temp = (Actor)result.getDirector();
-                if(temp.getMoviesDirected() == null)
+                if(temp.getMoviesDirected() == null) //se il regista non ha ancora una struttura moviesDirected, ne crea una
                 {
-                    temp.setMoviesDirected(createDizionario(Movie.class)); //deve farlo solo se non ha già una moviesDirrrrrrrrected
+                    temp.setMoviesDirected(createDizionario(Movie.class)); 
                 }
                 temp.addDirected(result);
             }
@@ -125,7 +135,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
                 for(Person p : result.getCast())
                 {
                     Actor a = (Actor) p;
-                    if(a.getMoviesStarred() == null)
+                    if(a.getMoviesStarred() == null) //se l'attore non ha ancora una struttura moviesStared, ne crea una
                     {
                         a.setMoviesStarred(createDizionario(Movie.class)); //deve farlo solo se non ha gia una  moviesStarrred
                     }
