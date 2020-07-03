@@ -1,9 +1,3 @@
-Title: Cape Fear	
-Year: 1991
-Director: Martin Scorsese
-Cast: Robert De Niro, Nick Nolte, Jessica Lange, Juliette Lewis
-Votes: 163093
-
 Title: Taxi Driver
 Year: 1976
 Director: Martin Scorsese
@@ -60,6 +54,12 @@ Votes: 256213
 
 Title: Pulp Fiction
 Year: 1994
-Director: Quentin Tarantino
-Cast: Samuel L. Jackson, Uma Thurman
+Director: Uma Thurman
+Cast: Samuel L. Jackson, Uma Thurman, John Travolta
 Votes:	1743616
+
+Title: Interstellar 
+Year: 2014
+Director: Christopher Nolan
+Cast: Matthew McConaughey, Anne Hathaway, Jessica Chastain, Michael Caine
+Votes:	2353616

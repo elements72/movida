@@ -140,6 +140,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
                 Actor actor = new Actor(m.getDirector().getName());
                 actors.insert(actor, m.getDirector().getName());
                 actor.setMoviesDirected(createDizionario(Movie.class));
+                actor.setMoviesStarred(createDizionario(Movie.class));
                 director = actor;
             }
 
@@ -153,6 +154,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
                     Actor temp = new Actor(cast[i].getName());
                     actors.insert(temp, temp.getName());
                     temp.setMoviesStarred(createDizionario(Movie.class));
+                    temp.setMoviesDirected(createDizionario(Movie.class));
                     actor[i] = temp;
                 }
             }
