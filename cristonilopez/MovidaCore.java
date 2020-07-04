@@ -2,7 +2,10 @@ package movida.cristonilopez;
 
 import movida.commons.*;
 import movida.cristonilopez.maps.Dizionario;
+import movida.cristonilopez.maps.Grafi.GrafoLA;
+import movida.cristonilopez.maps.Grafi.Nodo;
 import movida.cristonilopez.maps.albero23.Albero23;
+import movida.cristonilopez.maps.albero23.Nodo23;
 import movida.cristonilopez.ordinamento.InsertionSort;
 import movida.cristonilopez.ordinamento.comparators.CompareActiveActor;
 import movida.cristonilopez.ordinamento.comparators.CompareVote;
@@ -15,18 +18,20 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
+public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMovidaCollaborations {
 
     SortingAlgorithm sort;
     MapImplementation map;
     Dizionario<Movie> movies;
     Dizionario<Actor> actors;
+    GrafoLA collaborations;
 
     public MovidaCore() {
         this.sort = SortingAlgorithm.InsertionSort;
         this.map = MapImplementation.Alberi23;
         this.movies = null;
         this.actors = null;
+        this.collaborations = new GrafoLA();
     }
 
     protected <T> Dizionario<T> createDizionario(Class<T> c) {
@@ -354,4 +359,58 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
         return most;
     }
 
+    protected void createGrafo(){
+        this.collaborations = new GrafoLA();
+        Albero23<Nodo> nodi = new Albero23<Nodo>(Nodo.class);
+        Collaboration[] collabs = createCollaboration();
+        for (Collaboration collaboration : collabs) {
+            Person actorA = collaboration.getActorA();
+            Nodo nodoA = nodi.search(actorA.getName());
+            if(nodoA == null){
+                nodoA = collaborations.aggiungiNodo(actorA);
+                nodi.insert(nodoA, actorA.getName());
+            }
+            else{
+                Person actorB = collaboration.getActorB();
+                Nodo nodoB = nodi.search(actorB.getName());
+                if(nodoB == null){
+                    nodoB = collaborations.aggiungiNodo(actorB);
+                    nodi.insert(nodoB, actorB.getName());
+                }
+                collaborations.aggiungiArco(nodoA, nodoB, collaboration);
+                collaborations.aggiungiArco(nodoB, nodoA, collaboration);
+            }
+        }
+
+    }
+
+    protected Collaboration[] createCollaboration(){
+        Movie[] Movies = getAllMovies();
+        Albero23<Collaboration> collabs = new Albero23<Collaboration>(Collaboration.class); //Creo un albero contenente le collaborazioni, la chiave usata è la composizione dei nomi dei due attori
+        for (Movie movie : Movies) {                                        //Per ogni film vado a creare le collaborazioni tra gli autori
+            Person[] cast = movie.getCast();
+            for (int i = 0; i < Movies.length-1; i++) {
+                for (int j = i+1; j < Movies.length; j++) {
+                    Person a = cast[i];
+                    Person b = cast[j];
+                    String key = a.getName() + b.getName();
+                    Collaboration collab = collabs.search(key);
+                    if(collab == null){                         //Se la collaborazione non esiste ne vado a creare un'altra
+                        Collaboration newCollab = new Collaboration(a, b);
+                        collabs.insert(newCollab, key);
+                    }
+                    else{                                                     
+                        collab.addMovie(movie);                               // Se la collaborazione già esiste aggiungo il film
+                    }
+                }
+            }
+        }
+        return collabs.toArray();
+    }
+
+    @Override
+    public Person[] getDirectCollaboratorsOf(Person actor) {
+        collaborations. 
+        return null;
+    }
 }

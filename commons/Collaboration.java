@@ -31,5 +31,9 @@ public class Collaboration {
 		
 		return score / movies.size();
 	}
+
+	public void addMovie(Movie movie){
+		movies.add(movie);
+	}
 	
 }
