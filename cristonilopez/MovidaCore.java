@@ -151,11 +151,11 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
                 actor[i] = actors.search(cast[i].getName()); //cerco se l'attore è già nella struttura
                 if (actor[i] == null) //se non lo trovo lo creo
                 { 
-                    Actor temp = new Actor(cast[i].getName());
-                    actors.insert(temp, temp.getName());
-                    temp.setMoviesStarred(createDizionario(Movie.class));
-                    temp.setMoviesDirected(createDizionario(Movie.class));
-                    actor[i] = temp;
+                    Actor newActor = new Actor(cast[i].getName());
+                    actors.insert(newActor, newActor.getName());
+                    newActor.setMoviesStarred(createDizionario(Movie.class));
+                    newActor.setMoviesDirected(createDizionario(Movie.class));
+                    actor[i] = newActor;
                 }
             }
             Movie temp = new Movie(m.getTitle(), m.getYear(), m.getVotes(), actor, director);
