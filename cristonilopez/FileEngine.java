@@ -43,50 +43,57 @@ public class FileEngine {
      * @return array di Person contenente tutti gli attori del film
      */
     public static Person[] getCast(Scanner file) {
-        String cast = file.nextLine();
-        cast = cast.substring(cast.indexOf(' ')); //non gestisco il +1 perché lo gestisco direttamente nel ciclo
-        int i=0, j=0;
-        while(cast.indexOf(',', j+1) > 0) //non prevede che in un film ci sia solo un attore
+        try
         {
-            j = cast.indexOf(',', j+1);
-            i++;
-        }
-        //if(actors.search(nome) != null)  cerco la persona
-        //  Person[i] = actors.search(nome);
-        //else persona non present{
-        //  attore = new attore(nome)
-        //  actors.insert(attore, attore.name)
-        //  Person[i] = attore;
-        //  attore.setStarredMovie(new Dizionario(implementazione corrente))
-        //  }
-        // creo movie
-        // For each person in Person
-        // person.insertStarredFilm(movie)
-        // Stessa cosa va fatta per le persone che dirigono un film
-
-        Person[] persone = new Person[i];
-        j = 0;
-        i = 0;
-        while(cast.indexOf(',', j+1) > 0)
-        {
-            persone[i++] = new Person(cast.substring(j+1, cast.indexOf(',', j+1)));
-            j = cast.indexOf(',', j+1);
-        }
-        return persone;
+            String cast = file.nextLine();
+            cast = cast.substring(cast.indexOf(' ')); //non gestisco il +1 perché lo gestisco direttamente nel ciclo
+            int i= 1, j=0;
+            while(cast.indexOf(',', j+1) > 0)
+            {
+                j = cast.indexOf(',', j+1);
+                i++;
+            }
+        
+            Person[] persone = new Person[i];
+            j = 0;
+            for(i=0; i<persone.length; i++)  
+            {
+                int t = 0;     //ci permette di leggere l'ultimo attore ( il caso in cui non abbiamo un'ultima virgola) 
+                if(cast.indexOf(',', j) < 0)
+                {
+                    t=cast.length();
+                }
+                else
+                {
+                    t=cast.indexOf(',', j);
+                }
+                String name = cast.substring(j, t);
+                name = fromTabToSpace(name).trim();
+                persone[i] = new Person(name);
+                j = t + 1; //smaltisco la virgola di default, guarda dal carattere successivo
+            }
+         return persone;
+    }
+    catch (Exception e)
+    {
+        throw new MovidaFileException();
+    }
     }
 
     /**Ottiene il direttore
      * 
-     * Legge dallo scanner il direttore del film e lo restituisce
+     * Legge dallo scanner il direttore del film e ritorna il regista 
+     * in formato Person
      * 
      * @param fileScanner impostato sula lettura da file
      * @return Person contenente il direttore del film
      */
-    public static Person getDirector(Scanner file) { 
+    public static Person getDirector(Scanner file) {
         try{
-        String directort = file.nextLine();
-        directort = directort.substring(directort.indexOf(' ')+1);
-        Person director = new Person(directort);
+        String directortemp = file.nextLine();
+        directortemp = directortemp.substring(directortemp.indexOf(' ')+1);
+        directortemp = fromTabToSpace(directortemp).trim();
+        Person director = new Person(directortemp);
         return director;
         }
         catch (Exception e)
@@ -97,7 +104,7 @@ public class FileEngine {
 
     /**Ottiene l'anno di produzione
      * 
-     * Legge dallo Scanner impostato su file l'anno di direzione del film
+     * Legge dallo Scanner, impostato su file, l'anno di direzione del film
      * 
      * @param file Scanner impostato sulla lettura da file
      * @return anno di produzione del film
@@ -107,7 +114,7 @@ public class FileEngine {
         {
         String temp = file.nextLine();
         temp = temp.substring(temp.indexOf(':')+1);
-        Integer year = 0; //prende la riga contenente l'anno di pubblicaazione, ritaglia via la stringa iniziale e converte in int TODO aggiungere controllo
+        Integer year = 0; //prende la riga contenente l'anno di pubblicaazione, ritaglia via la stringa iniziale e converte in int
         for(int i = 0; i<temp.length(); i++)
         {
             if(Character.isDigit(temp.charAt(i)))
@@ -135,7 +142,8 @@ public class FileEngine {
         {
         String title = file.nextLine();
         title = title.substring(title.indexOf(' ')+1);
-        return title; //TODO tagliare la strnga dopo il nome del film per rimuovere qualsiasi cosa ci sia dopo che non ci interessa
+        title = fromTabToSpace(title).trim();
+        return title;
         }
         catch (Exception e)
         {
@@ -143,4 +151,21 @@ public class FileEngine {
         }
     }
 
+    /**Ritorna una stringa senza tab
+     * 
+     * Prende una stringa e sostituisce tutti i
+     * tab (\t) con uno spazio
+     * 
+     * @param st stringa da usare
+     * @return Striga senza tab
+     */
+    private static String fromTabToSpace(String st){
+        int tabIndex;
+        do{
+            tabIndex = st.indexOf('\t');
+            if(tabIndex > 0)
+                st = st.replace('\t', ' ');
+        }while(tabIndex > 0);
+        return st;
+    }
 }

@@ -1,45 +1,47 @@
 package movida.cristonilopez.maps.albero23;
 
-import movida.cristonilopez.maps.Coppia;
+import java.lang.reflect.Array;
 import movida.cristonilopez.maps.Dizionario;
 
-public class Albero23 implements Dizionario{
+public class Albero23<T> implements Dizionario<T>{
     private Nodo radice;
     private int nNodi;  //numero di foglie presenti
+    final Class<T> parameterClass;
     
-    public Albero23(){
+    public Albero23(Class<T> parameterClass){
         radice = null;
         nNodi  = 0; 
+        this.parameterClass = parameterClass;
     }
     /**
      * Il metodo insert permette di inserire un nuovo elemento all'interno del nostro albero
      * @param data
      * @param key
      */
-    public void insert(Object data, String key){
+    public void insert(T data, String key){
         if(radice == null){                 //Controlliamo che il nostro albero non sia vuoto
             nNodi = nNodi + 1;
-            Foglia23 nuovaFoglia = new Foglia23(new Coppia(data, key));
+            Foglia23<T> nuovaFoglia = new Foglia23<T>(data, key);
             radice = nuovaFoglia;
         }
         else if(radice instanceof Foglia23){
             if(radice.getKey().compareTo(key) == 0){    //Se la chiave è già presente aggiorno le informazioni
-                ((Foglia23)radice).setInfo(data);
+                ((Foglia23<T>)radice).setInfo(data);
             }
             else{
                 nNodi = nNodi+1;
                 Nodo23 nuovaRadice = new Nodo23();
                 nuovaRadice.figli[0] = radice;
                 radice = nuovaRadice;
-                ((Nodo23)radice).addChild(new Foglia23(new Coppia(data, key)));
+                ((Nodo23)radice).addChild(new Foglia23<T>(data, key));
             }
         }
         else{
             Nodo23 padre = searchPosition(key);                 
-            Foglia23 foglia = (Foglia23)padre.searchNode(key);          //Controllo se è presente una foglia con tale chiave
+            Foglia23<T> foglia = (Foglia23<T>)padre.searchNode(key);          //Controllo se è presente una foglia con tale chiave
             if(foglia == null || foglia.getKey().compareToIgnoreCase(key) != 0){  //Se non è presente aggiungo normalmente la nuova foglia
                 nNodi = nNodi+1;
-                Foglia23 nuovaFoglia = new Foglia23(new Coppia(data, key));
+                Foglia23<T> nuovaFoglia = new Foglia23<T>(data, key);
                 padre.addChild(nuovaFoglia);
                 if(padre.grado()>3)                                      //Se il nostro nodo non è ancora saturo possiamo aggiungere un nuovo figlio
                     split(padre);
@@ -60,7 +62,7 @@ public class Albero23 implements Dizionario{
             return false;
         }
         else if(radice instanceof Foglia23){
-            if(key.compareToIgnoreCase(((Foglia23)radice).getKey()) == 0){
+            if(key.compareToIgnoreCase(((Foglia23<T>)radice).getKey()) == 0){
                 radice = null;
                 nNodi = 0;
                 return true;
@@ -92,18 +94,18 @@ public class Albero23 implements Dizionario{
         }
     }
 
-    public Object search(String key){
+    public T search(String key){
         if(radice == null)
             return null;
         else if(radice instanceof Foglia23)
             if(radice.getKey().compareToIgnoreCase(key) == 0)
-                return ((Foglia23)radice).getInfo();
+                return ((Foglia23<T>)radice).getInfo();
             else
                 return null;
         else{
             Nodo foglia =  searchPosition(key).searchNode(key);
             if(foglia.getKey().compareToIgnoreCase(key) == 0)
-                return ((Foglia23)foglia).getInfo();
+                return ((Foglia23<T>)foglia).getInfo();
             else
                 return null;
         }
@@ -190,11 +192,11 @@ public class Albero23 implements Dizionario{
         return padre;
     }
 
-    int toArrayRec(Nodo radice, Object[]A, int n){
+    int toArrayRec(Nodo radice, T[]A, int n){
         Nodo tmp = radice;
         if(tmp.isLeaf()){
             //System.out.println(((Foglia23)tmp).key.toString());
-            A[n] = ((Foglia23)tmp).info;
+            A[n] = (T)((Foglia23<T>)tmp).getInfo();
             n = n+1;
             return n;
         }
@@ -228,9 +230,11 @@ public class Albero23 implements Dizionario{
      * @return  Array ordinato
      */
 
-    public Object[] toArray(){
-        Object[] A = new Object[nNodi];
-        toArrayRec(radice, A, 0);
+    public T[] toArray(){
+        T[] A = null;
+        A = (T[]) Array.newInstance(parameterClass, nNodi);
+        if(nNodi != 0)
+            toArrayRec(radice, A, 0);
         return A;
     }
 

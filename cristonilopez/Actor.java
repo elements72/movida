@@ -10,26 +10,47 @@ import movida.cristonilopez.maps.Dizionario;
  */
 
 public class Actor extends Person{
-    Dizionario moviesDirected;
-    Dizionario moviesStarred;
+    Dizionario<Movie> moviesDirected; //inglese errato, directedMovies
+    Dizionario<Movie> moviesStarred;   //inglese errato, starredMovies
 
     public Actor(String name){
         super(name);
+        this.moviesDirected = null;
+        this.moviesStarred = null;
     }
     /**
      * Assegna a un attore l'elenco dei film da lui diretti
      * @param movieDirected
      */
-    public void setMoviesDirected(Dizionario moviesDirected) {
+    public void setMoviesDirected(Dizionario<Movie> moviesDirected) {
         this.moviesDirected = moviesDirected;
     }
     /**
      * Assegna a un attore l'elenco dei fil a cui ha preso parte
      * @param movieTakePart
      */
-    public void setMoviesStarred(Dizionario moviesStarred) {
+    public void setMoviesStarred(Dizionario<Movie> moviesStarred) {
         this.moviesStarred = moviesStarred;
     }
+
+    /**
+     * Cerca tra i film in cui l'attore ha recitato
+     * @param title nome del film
+     * @return
+     */
+    public Movie searchStarredMovie(String title){
+        return moviesStarred == null ? null : moviesStarred.search(title);
+    }
+
+    /**
+     * Cerca tra i film diretti dall'attore
+     * @param title nome del film
+     * @return
+     */
+    public Movie searchDirectedMovie(String title){
+        return moviesDirected == null ? null : moviesDirected.search(title);
+    }
+
     /**
      * Aggiunge un film dove l'attore ha partecipato
      * @param movie
@@ -48,13 +69,13 @@ public class Actor extends Person{
      * Fornisce i film diretti
      */
     public Movie[] getMoviesDirected() {
-        return (Movie[])moviesDirected.toArray();
+        return moviesDirected == null ? null : (Movie[]) moviesDirected.toArray();
     }
     /**
      * Fornisce i film dove ha partecipato
      */
     public Movie[] getMoviesStarred() {
-        return (Movie[])moviesStarred.toArray();
+        return moviesStarred == null ? null : (Movie[]) moviesStarred.toArray();
     }
     /**
      * Rimuove il film tra quelli in cui l'attore ha partecipato
@@ -75,13 +96,14 @@ public class Actor extends Person{
      * Fornisce il numero di film dove l'attore è presente
      */
     public int countMoviesStarred(){
-        return moviesStarred.count();
+        return moviesStarred == null ? 0 :  moviesStarred.count();
+
     }
     /**
      * Fornisce il numero di film diretti
      */
     public int countMoviesDirected(){
-        return moviesDirected.count();
+        return moviesDirected == null ? 0 : moviesDirected.count();
     }
 
 }
