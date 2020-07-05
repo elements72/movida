@@ -13,15 +13,15 @@ public class Test {
         core = new MovidaCore();
         core.loadFromFile(f);
         tests(); // Funzione con vari test
-        File f1 = new File("movida/commons/esempio-formato-dati-2.txt"); // cammino relativo
-        core.loadFromFile(f1);
-        tests(); // Funzione con vari test
-        File fout = new File("movida/cristonilopez/esempio-scrittura-dati.txt");
-        core.saveToFile(fout);
+        //File f1 = new File("movida/commons/esempio-formato-dati-2.txt"); // cammino relativo
+        //core.loadFromFile(f1);
+        //tests(); // Funzione con vari test
+        //File fout = new File("movida/cristonilopez/esempio-scrittura-dati.txt");
+        //core.saveToFile(fout);
     }
 
     public static void tests(){
-        String searchActor = "uma Thurman";
+        String searchActor = "Bruce Willis";
         String searchDirector = "Fabio il fruttivendolo";
         String searchMovie = "pulp fiction";
         String searchString = "Force";
@@ -46,8 +46,9 @@ public class Test {
         System.out.println(N + " Film più votati:" + Arrays.toString(core.searchMostVotedMovies(N)) + "\n");
         System.out.println("Film contenenti la stringa:" + searchString
         + Arrays.toString(core.searchMoviesByTitle(searchString)) + "\n");
-        System.out.println("Elimino il film:" + searchMovie + " -> " + core.deleteMovieByTitle(searchMovie) + "\n");
+        //System.out.println("Elimino il film:" + searchMovie + " -> " + core.deleteMovieByTitle(searchMovie) + "\n");
         System.out.println("Collaboratori di:" + searchActor + Arrays.toString(core.getDirectCollaboratorsOf(new Person(searchActor))) + "\n");
+        System.out.println("Team di:" + searchActor + Arrays.toString(core.getTeamOf(new Person(searchActor))) + "\n");
 
     }
         

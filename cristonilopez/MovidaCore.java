@@ -17,8 +17,10 @@ import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMovidaCollaborations {
@@ -521,8 +523,32 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
 
     @Override
     public Person[] getTeamOf(Person actor) {
-        // TODO Auto-generated method stub
-        return null;
+        HashMap<Nodo, Boolean> visited = new HashMap<>();   //True nodo visitato, False nodo inesplorato
+        Queue<Nodo> frontiera = new LinkedList<>();         //Frontiera per BFS
+        LinkedList<Person> team = new LinkedList<>();       //Lista da ritornare
+        Nodo radice = nodi.get(actor.getName().toLowerCase());  //Recuperiamo il nodo di origine della visista
+        if(radice != null){
+            visited.put(radice, true);                          //Visitiamo il nodo
+            frontiera.add(radice);                              //Aggiungiamo la radice alla frontiera
+            while(!frontiera.isEmpty()){
+                Nodo x = frontiera.poll();
+                team.add((Person)collaborations.infoNodo(x));   //Aggiungiamo l'attore al team
+                visited.putIfAbsent(x, true);
+                List<Arco> archi = collaborations.archiUscenti(x);  //
+                Iterator<Arco> iterator =  archi.iterator();
+                while(iterator.hasNext()){
+                    Arco arco = iterator.next();
+                    Nodo dest = arco.dest;
+                    Boolean visitato = visited.get(dest);       //Controlliamo se il nodo è stato visitato
+                    if(visitato == null){
+                        frontiera.add(dest);
+                        visited.put(dest, true);
+                    }
+                }
+
+            }
+        }
+        return team.toArray(new Person[team.size()]);
     }
 
     @Override
