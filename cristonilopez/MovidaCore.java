@@ -252,7 +252,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
                 ((Actor) actor).deleteMoviesStarred(title);
                 tryDeleteActor(((Actor) actor));
             }
-            deleteCollaboration(m);
+            deleteCollaborationsOfMovie(m);
             Actor director = (Actor) m.getDirector(); // Elimino dal direttore tale film
             director.deleteMoviesDirected(title);
             tryDeleteActor(director); // Se l'attore non è presente in alcun film lo elimino
