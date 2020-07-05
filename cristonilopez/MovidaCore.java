@@ -2,6 +2,9 @@ package movida.cristonilopez;
 
 import movida.commons.*;
 import movida.cristonilopez.maps.Dizionario;
+import movida.cristonilopez.maps.Grafi.Arco;
+import movida.cristonilopez.maps.Grafi.GrafoLA;
+import movida.cristonilopez.maps.Grafi.Nodo;
 import movida.cristonilopez.maps.albero23.Albero23;
 import movida.cristonilopez.ordinamento.InsertionSort;
 import movida.cristonilopez.ordinamento.comparators.CompareActiveActor;
@@ -13,21 +16,27 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
-public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
+public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMovidaCollaborations {
 
     SortingAlgorithm sort;
     MapImplementation map;
     Dizionario<Movie> movies;
     Dizionario<Actor> actors;
+    HashMap<String, Nodo> nodi;
+    GrafoLA collaborations;
 
     public MovidaCore() {
         this.sort = SortingAlgorithm.InsertionSort;
         this.map = MapImplementation.Alberi23;
         this.movies = null;
         this.actors = null;
+        this.collaborations = null;
+        this.nodi = null;
     }
 
     protected <T> Dizionario<T> createDizionario(Class<T> c) {
@@ -201,6 +210,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
 
             movies.insert(temp, temp.getTitle()); //aggiungo il film nella struttura principale
         }
+        createCollaborations();
         file.close();
     }
 
@@ -286,11 +296,50 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
                 ((Actor) actor).deleteMoviesStarred(title);
                 tryDeleteActor(((Actor) actor));
             }
+            deleteCollaborationsOfMovie(m);
             Actor director = (Actor) m.getDirector(); // Elimino dal direttore tale film
             director.deleteMoviesDirected(title);
             tryDeleteActor(director); // Se l'attore non è presente in alcun film lo elimino
         }
         return movies.delete(title);
+    }
+
+    /**
+     * Il metodo elimina tutte le collaborazioni tra gli attori di un film
+     * @param movie
+     */
+    protected void deleteCollaborationsOfMovie(Movie movie){
+        Person[] cast = movie.getCast();
+        for (int i = 0; i < cast.length-1; i++) {
+            for (int j = i+1; j < cast.length; j++) {
+                Person a = cast[i];
+                Person b = cast[j];
+                deleteCollaboration(a, b, movie);
+            }
+        }
+    }
+
+    /**
+     * Il metodo elimina la collaborazione tra due attori in un determinato film
+     * @param a
+     * @param b
+     * @param movie
+     */
+    protected void deleteCollaboration(Person a, Person b, Movie movie){
+        Nodo nodoA = nodi.get(a.getName().toLowerCase()); // Cerchiamo i nostri nodi nella hash map
+        Nodo nodoB = nodi.get(b.getName().toLowerCase());
+        Arco arcoAB = collaborations.sonoAdiacenti(nodoA, nodoB); // Ricerchiamo i nostri archi
+        Arco arcoBA = collaborations.sonoAdiacenti(nodoA, nodoB);
+        Collaboration collab = (Collaboration) collaborations.infoArco(arcoAB);
+        collab.deleteMovie(movie); // Rimuoviamo il film dalla collaborazione
+        if (collab.isEmpty()) { // Se non vi è alcun film in cui gli attori hanno recitato insieme
+            collaborations.rimuoviArco(arcoAB); // Rimuoviamo gli archi e le collaborazioni
+            collaborations.rimuoviArco(arcoBA);
+            if (collaborations.gradoUscente(nodoA) == 0) // Se il nostro nodo non ha più archi andiamo ad eliminarlo
+                collaborations.rimuoviNodo(nodoA);
+            if (collaborations.gradoUscente(nodoB) == 0)
+                collaborations.rimuoviNodo(nodoB);
+        }
     }
 
     @Override
@@ -398,4 +447,87 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
         return most;
     }
 
+ 
+    /** 
+     * Create collaborations crea le collaborazioni e il grafo a queste associate
+    */
+    protected void createCollaborations(){
+        this.collaborations = new GrafoLA();
+        this.nodi = new HashMap<>();
+        Movie[] Movies = getAllMovies();
+        for (Movie movie : Movies) {                // Per ogni film vado a creare le collaborazioni tra gli autori
+            Person[] cast = movie.getCast();        //Prendo tutte le persone del cast
+            for (int i = 0; i < cast.length - 1; i++) {   //Ciclo su tutte le possibili coppie
+                for (int j = i + 1; j < cast.length; j++) {
+                    Person a = cast[i];                     
+                    Person b = cast[j];
+                    createCollaboration(a, b, movie);
+                }
+            }
+        }
+    }
+
+    protected void createCollaboration(Person a, Person b, Movie movie){
+        boolean newCollabF = false;
+        Nodo nodoA = nodi.get(a.getName().toLowerCase());     //Cerchiamo i nostri nodi nella hash map
+        Nodo nodoB = nodi.get(b.getName().toLowerCase());
+        if (nodoA != null && nodoB != null) {   // Se  i nodi sono entrambi presenti controlliamo se sono adiacenti
+            Arco arco = collaborations.sonoAdiacenti(nodoA, nodoB);
+            if(arco != null){
+                Collaboration collab = (Collaboration) collaborations.infoArco(arco);
+                collab.addMovie(movie);
+            }
+            else
+                newCollabF = true;
+        }
+            else{
+                if (nodoA == null) {                    //Se anche uno di loro non è presente si tratta allora di una nuova collaborazione
+                    nodoA = collaborations.aggiungiNodo(a);
+                    nodi.put(a.getName().toLowerCase(), nodoA);
+                }
+                if(nodoB == null){
+                    nodoB = collaborations.aggiungiNodo(b);
+                    nodi.put(b.getName().toLowerCase(), nodoB);
+                }
+                    newCollabF = true;
+                
+            }
+        if(newCollabF){                         //Creo la nuova collaborazione
+            Collaboration newCollab = new Collaboration(a, b);
+            newCollab.addMovie(movie);          //Inserisco il film
+            collaborations.aggiungiArco(nodoA, nodoB, newCollab);
+            collaborations.aggiungiArco(nodoB, nodoA, newCollab);   
+        }
+        
+    }
+    
+
+    @Override
+    public Person[] getDirectCollaboratorsOf(Person actor) {
+        Nodo node = nodi.get(actor.getName().toLowerCase());
+        Person[] directCollaborator;
+        if(node != null){
+            directCollaborator = new Person[collaborations.gradoUscente(node)];
+            List<Arco> archiIncidenti =  (List <Arco>)collaborations.archiUscenti(node);
+            for (int i = 0; i < directCollaborator.length; i++) {
+                Nodo dest = archiIncidenti.get(i).dest;
+                directCollaborator[i] = (Person)collaborations.infoNodo(dest);
+            }
+         }
+        else
+            directCollaborator = new Person[0];
+        return directCollaborator;
+    }
+
+    @Override
+    public Person[] getTeamOf(Person actor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Collaboration[] maximizeCollaborationsInTheTeamOf(Person actor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
