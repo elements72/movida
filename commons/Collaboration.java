@@ -35,5 +35,13 @@ public class Collaboration {
 	public void addMovie(Movie movie){
 		movies.add(movie);
 	}
+
+	public void deleteMovie(Movie movie){
+		movies.remove(movie);
+	}
+
+	public boolean isEmpty(){
+		return movies.isEmpty();
+	}
 	
 }
