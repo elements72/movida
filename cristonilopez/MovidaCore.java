@@ -552,49 +552,48 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
                         visited.put(dest, true);
                     }
                 }
-
             }
         }
         return team.toArray(new Person[team.size()]);
     }
 
     @Override
-    public Collaboration[] maximizeCollaborationsInTheTeamOf(Person actor) {
-        HashMap<Nodo, Collaboration> visited = new HashMap<>(); // Associa ad ogni nodo la collaborazione con cui lo abbiamo raggiunto
+    public Collaboration[] maximizeCollaborationsInTheTeamOf(Person actor){
+        //Inizializzo le strutture dati
+        HashMap<Nodo, Collaboration> visited = new HashMap<>(); //Associa ad ogni nodo la collaborazione con cui lo abbiamo raggiunto 
         HashMap<Nodo, InfoDHeap> infoHeap = new HashMap<>();    //Mantiene i riferimenti agli elementi dell'heap per poter poi riuscire ad eseguire una decrease key
-        LinkedList<Collaboration> bestCollaboration = new LinkedList<>();
         DHeap coda = new DHeap();
-        Nodo radice = nodi.get(actor.getName().toLowerCase()); // Recuperiamo il nodo di origine della visista
-        if(radice != null){                                    //Controlliamo che l'attore sia presente
-            visited.put(radice, new Collaboration(actor, actor));
-            InfoDHeap info = coda.insert(radice, new Double(0.0));
+        
+        Nodo radice = nodi.get(actor.getName().toLowerCase());     //Recuperiamo il nodo di origine della visista
+        if(radice != null){                                        //Controlliamo che l'attore sia presente
+            visited.put(radice, new Collaboration(actor, actor));  //Nuova collaborazione di un attore con se stesso
+            InfoDHeap info = coda.insert(radice, new Double(0.0)); //Poniamo la radice a distanza 0
             infoHeap.put(radice, info);
             while(!coda.isEmpty()){
                 Nodo x = (Nodo) coda.findMin();
                 coda.deleteMin();
-                bestCollaboration.add(visited.get(x));
-                List<Arco> archi = (List<Arco>)collaborations.archiUscenti(x);  //
-                Iterator<Arco> iterator =  archi.iterator();
-                while(iterator.hasNext()){                              //Per tutti i nodi y adiacenti
+                List<Arco> archi = (List<Arco>)collaborations.archiUscenti(x);  //Recuperiamo tutti gli archi uscenti dal nostro nodo
+                Iterator<Arco> iterator =  archi.iterator();                    //Iteriamo su tutti gli archi
+                while(iterator.hasNext()){                                      //Per tutti i nodi y adiacenti
                     Arco arco = iterator.next();
-                    Nodo dest = arco.dest;                              //Recuperiamo y
+                    Nodo dest = arco.dest;                              //Recuperiamo il nodo adiacente
                     Collaboration oldCollab = visited.get(dest);        //Recuperiamo la vecchia collaborazione con cui abbiamo raggiunto y
                     Collaboration collab = (Collaboration)collaborations.infoArco(arco);    
                     if(oldCollab == null){                              //Se questa non esiste la andiamo ad aggiungere
-                        info = coda.insert(dest, -collab.getScore());          //Usiamo sempre un punteggio negativo in quanto la coda con priorità usa un min-heap
+                        info = coda.insert(dest, -collab.getScore());   //Usiamo sempre un punteggio negativo in quanto la coda con priorità usa un min-heap
                         visited.put(dest, collab);
-                        infoHeap.put(dest, info);
+                        infoHeap.put(dest, info);                       //Salviamo in InfoHeap il riferimento per poter poi riuscire ad eseguire la decrease key
                     }
-                    else if(visited.get(dest).getScore() < collab.getScore()){                //Se il valore di tale collaborazione è minore rispetto a quello di un altra che raggiunge lo stesso nodo
-                        coda.decreaseKey(infoHeap.get(dest), -collab.getScore());             //Andiamo a modificare la collaborazione ed i valori
-                        visited.replace(dest, collab);
+                    else if(oldCollab.getScore() < collab.getScore()){                //Se il valore di tale collaborazione è minore rispetto a quello di un altra che raggiunge lo stesso nodo
+                        coda.decreaseKey(infoHeap.get(dest), -collab.getScore());     //Aggiorno la "distanza"
+                        visited.replace(dest, collab);                                //Aggiorno la collaborazione 
                     }
                 }
             }
         }
-        if(bestCollaboration.size()>0)
-            bestCollaboration.removeFirst();    
-        return bestCollaboration.toArray(new Collaboration[bestCollaboration.size()]);
+ 
+        visited.remove(radice);
+        return visited.values().toArray(new Collaboration[visited.size()]);
     }
 
 }
