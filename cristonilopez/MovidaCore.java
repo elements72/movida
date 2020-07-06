@@ -207,14 +207,20 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
                         tempActor.deleteMoviesStarred(oldMovie.getTitle());
                         tryDeleteActor(tempActor);
                     }
-
-                    if(oldMovie.getDirector().getName().compareTo(director.getName()) !=0) //controllo se c'è stato un cambio di regista e nel caso rimuovo il film dai suoi film diretti
-                    {
+                    /**TODO seconda modifica da approvare, perchè fare questo controllo nel ciclo? Basta farlo una volta fuori
+                     * if(oldMovie.getDirector().getName().compareTo(director.getName()) !=0)
+                     * //controllo se c'è stato un cambio di regista e nel caso rimuovo il film dai
+                     * suoi film diretti { Actor oldDirector = (Actor)oldMovie.getDirector();
+                     * oldDirector.deleteMoviesDirected(temp.getTitle());
+                     * tryDeleteActor(oldDirector); }
+                     */
+                }
+                    if(oldMovie.getDirector().getName().compareTo(director.getName()) != 0){
+                     //controllo se c'è stato un cambio di regista e nel caso rimuovo il film dai suoi film diretti { 
                         Actor oldDirector = (Actor)oldMovie.getDirector();
                         oldDirector.deleteMoviesDirected(temp.getTitle());
-                        tryDeleteActor(oldDirector);
+                        tryDeleteActor(oldDirector); 
                     }
-                }
             }
 
             movies.insert(temp, temp.getTitle()); //aggiungo il film nella struttura principale
