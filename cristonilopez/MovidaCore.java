@@ -186,37 +186,13 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
                 for(Person a: oldMovie.getCast()) //controlo se un attore non fa più farte del cast e nel caso lo rimuovo
                 {
                     Actor tempActor = (Actor)a;
-                    boolean trovato = false;
-                    if(((Actor)a).searchStarredMovie(oldMovie.getTitle()) == oldMovie)
-                        trovato = true;
-                    //TODO ottimizzazione da approvare
-                    //Basta verificare se il riferimento relativo al film che viene aggiornato è uguale a quello vecchio
-                    //se così fosse vuol dire che l'attore non ha ricevuto l'aggiornamento al riferimento del record del nuovo film
-                    //quindi non è presente nel nuovo cast
-                    /*for(Actor b: actor)
-                    {
-                        if(a == b)
-                        {
-                            trovato = true;
-                            break;
-                        }
-                    }
-                    */
-                    if(!trovato)
-                    {
+                    if(((Actor) a).searchStarredMovie(oldMovie.getTitle()) == oldMovie){
                         tempActor.deleteMoviesStarred(oldMovie.getTitle());
                         tryDeleteActor(tempActor);
                     }
-                    /**TODO seconda modifica da approvare, perchè fare questo controllo nel ciclo? Basta farlo una volta fuori
-                     * if(oldMovie.getDirector().getName().compareTo(director.getName()) !=0)
-                     * //controllo se c'è stato un cambio di regista e nel caso rimuovo il film dai
-                     * suoi film diretti { Actor oldDirector = (Actor)oldMovie.getDirector();
-                     * oldDirector.deleteMoviesDirected(temp.getTitle());
-                     * tryDeleteActor(oldDirector); }
-                     */
                 }
                     if(oldMovie.getDirector().getName().compareTo(director.getName()) != 0){
-                     //controllo se c'è stato un cambio di regista e nel caso rimuovo il film dai suoi film diretti { 
+                        //controllo se c'è stato un cambio di regista e nel caso rimuovo il film dai suoi film diretti { 
                         Actor oldDirector = (Actor)oldMovie.getDirector();
                         oldDirector.deleteMoviesDirected(temp.getTitle());
                         tryDeleteActor(oldDirector); 
@@ -350,10 +326,14 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
         if (collab.isEmpty()) { // Se non vi è alcun film in cui gli attori hanno recitato insieme
             collaborations.rimuoviArco(arcoAB); // Rimuoviamo gli archi e le collaborazioni
             collaborations.rimuoviArco(arcoBA);
-            if (collaborations.gradoUscente(nodoA) == 0) // Se il nostro nodo non ha più archi andiamo ad eliminarlo
-                collaborations.rimuoviNodo(nodoA);
-            if (collaborations.gradoUscente(nodoB) == 0)
+            if (collaborations.gradoUscente(nodoA) == 0){ // Se il nostro nodo non ha più archi andiamo ad eliminarlo
+                collaborations.rimuoviNodo(nodoA);         
+                nodi.remove(a.getName().toLowerCase());                 
+            }
+            if (collaborations.gradoUscente(nodoB) == 0){
                 collaborations.rimuoviNodo(nodoB);
+                nodi.remove(b.getName().toLowerCase());
+            }
         }
     }
 

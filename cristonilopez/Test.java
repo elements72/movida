@@ -12,7 +12,7 @@ public class Test {
         File f = new File("movida/commons/esempio-formato-dati.txt"); // cammino relativo
         core = new MovidaCore();
         core.loadFromFile(f);
-        tests(); // Funzione con vari test
+        //tests(); // Funzione con vari test
         File f1 = new File("movida/commons/esempio-formato-dati-2.txt"); // cammino relativo
         core.loadFromFile(f1);
         tests(); // Funzione con vari test
@@ -23,7 +23,7 @@ public class Test {
     public static void tests(){
         String searchActor = "Uma Thurman";
         String searchDirector = "Fabio il fruttivendolo";
-        String searchMovie = "ciao";
+        String searchMovie = "pulp fiction";
         String searchString = "Force";
         Integer anno = new Integer(1997);
         int N = 20;
@@ -46,7 +46,7 @@ public class Test {
         System.out.println(N + " Film più votati:" + Arrays.toString(core.searchMostVotedMovies(N)) + "\n");
         System.out.println("Film contenenti la stringa:" + searchString
         + Arrays.toString(core.searchMoviesByTitle(searchString)) + "\n");
-        //System.out.println("Elimino il film:" + searchMovie + " -> " + core.deleteMovieByTitle(searchMovie) + "\n");
+        System.out.println("Elimino il film:" + searchMovie + " -> " + core.deleteMovieByTitle(searchMovie) + "\n");
         System.out.println("Collaboratori di:" + searchActor + Arrays.toString(core.getDirectCollaboratorsOf(new Person(searchActor))) + "\n");
         System.out.println("Team di:" + searchActor + Arrays.toString(core.getTeamOf(new Person(searchActor))) + "\n");
         System.out.println("Miglior collaborazione di:" + searchActor + Arrays.toString(core.maximizeCollaborationsInTheTeamOf(new Person(searchActor))) + "\n");
