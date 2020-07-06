@@ -187,7 +187,13 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
                 {
                     Actor tempActor = (Actor)a;
                     boolean trovato = false;
-                    for(Actor b: actor)
+                    if(((Actor)a).searchStarredMovie(oldMovie.getTitle()) == oldMovie)
+                        trovato = true;
+                    //TODO ottimizzazione da approvare
+                    //Basta verificare se il riferimento relativo al film che viene aggiornato è uguale a quello vecchio
+                    //se così fosse vuol dire che l'attore non ha ricevuto l'aggiornamento al riferimento del record del nuovo film
+                    //quindi non è presente nel nuovo cast
+                    /*for(Actor b: actor)
                     {
                         if(a == b)
                         {
@@ -195,6 +201,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
                             break;
                         }
                     }
+                    */
                     if(!trovato)
                     {
                         tempActor.deleteMoviesStarred(oldMovie.getTitle());
