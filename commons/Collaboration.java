@@ -43,5 +43,10 @@ public class Collaboration {
 	public boolean isEmpty(){
 		return movies.isEmpty();
 	}
+
+	@Override
+	public String toString() {
+		return actorA.getName() + "+" + actorB.getName() + "  score:"+ getScore()+"\n";
+	}
 	
 }

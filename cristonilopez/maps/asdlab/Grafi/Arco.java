@@ -1,4 +1,5 @@
-package movida.cristonilopez.maps.Grafi;
+package movida.cristonilopez.maps.asdlab.Grafi;
+import movida.cristonilopez.maps.asdlab.Rif;
 
 /* ============================================================================
  *  $RCSfile: Arco.java,v $

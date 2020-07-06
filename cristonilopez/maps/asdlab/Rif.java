@@ -1,4 +1,4 @@
-package movida.cristonilopez.maps.Grafi;
+package movida.cristonilopez.maps.asdlab;
 
 /* ============================================================================
  *  $RCSfile: Rif.java,v $

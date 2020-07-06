@@ -2,9 +2,9 @@ package movida.cristonilopez;
 
 import movida.commons.*;
 import movida.cristonilopez.maps.Dizionario;
-import movida.cristonilopez.maps.Grafi.Arco;
-import movida.cristonilopez.maps.Grafi.GrafoLA;
-import movida.cristonilopez.maps.Grafi.Nodo;
+import movida.cristonilopez.maps.asdlab.CodePriorita.DHeap;
+import movida.cristonilopez.maps.asdlab.CodePriorita.DHeap.InfoDHeap;
+import movida.cristonilopez.maps.asdlab.Grafi.*;
 import movida.cristonilopez.maps.albero23.Albero23;
 import movida.cristonilopez.ordinamento.InsertionSort;
 import movida.cristonilopez.ordinamento.comparators.CompareActiveActor;
@@ -469,27 +469,34 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
         }
     }
 
+    /**
+     * Dati due attori e un film il metodo crea la Collaboration tra loro se non esisite, altrimenti
+     * aggiunge il film alla collaborazione esistente
+     * @param a
+     * @param b
+     * @param movie
+     */
     protected void createCollaboration(Person a, Person b, Movie movie){
         boolean newCollabF = false;
         Nodo nodoA = nodi.get(a.getName().toLowerCase());     //Cerchiamo i nostri nodi nella hash map
         Nodo nodoB = nodi.get(b.getName().toLowerCase());
-        if (nodoA != null && nodoB != null) {   // Se  i nodi sono entrambi presenti controlliamo se sono adiacenti
-            Arco arco = collaborations.sonoAdiacenti(nodoA, nodoB);
+        if (nodoA != null && nodoB != null) {                 // Se  i nodi sono entrambi presenti controlliamo se sono adiacenti
+            Arco arco = collaborations.sonoAdiacenti(nodoA, nodoB);     
             if(arco != null){
-                Collaboration collab = (Collaboration) collaborations.infoArco(arco);
-                collab.addMovie(movie);
+                Collaboration collab = (Collaboration) collaborations.infoArco(arco);   //Se sono adiacenti esiste già una collaborazione
+                collab.addMovie(movie);                       //Aggiungiamo il movie alla lista dei film
             }
             else
                 newCollabF = true;
         }
             else{
-                if (nodoA == null) {                    //Se anche uno di loro non è presente si tratta allora di una nuova collaborazione
+                if (nodoA == null) {                            //Se anche uno di loro non è presente si tratta allora di una nuova collaborazione
                     nodoA = collaborations.aggiungiNodo(a);
-                    nodi.put(a.getName().toLowerCase(), nodoA);
+                    nodi.put(a.getName().toLowerCase(), nodoA); //Creiamo il nodo A se non esiste
                 }
                 if(nodoB == null){
                     nodoB = collaborations.aggiungiNodo(b);
-                    nodi.put(b.getName().toLowerCase(), nodoB);
+                    nodi.put(b.getName().toLowerCase(), nodoB); //Creiamo il nodo B se non esiste
                 }
                     newCollabF = true;
                 
@@ -534,7 +541,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
                 Nodo x = frontiera.poll();
                 team.add((Person)collaborations.infoNodo(x));   //Aggiungiamo l'attore al team
                 visited.putIfAbsent(x, true);
-                List<Arco> archi = collaborations.archiUscenti(x);  //
+                List<Arco> archi = (List<Arco>)collaborations.archiUscenti(x);  //
                 Iterator<Arco> iterator =  archi.iterator();
                 while(iterator.hasNext()){
                     Arco arco = iterator.next();
@@ -553,7 +560,41 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
 
     @Override
     public Collaboration[] maximizeCollaborationsInTheTeamOf(Person actor) {
-        // TODO Auto-generated method stub
-        return null;
+        HashMap<Nodo, Collaboration> visited = new HashMap<>(); // Associa ad ogni nodo la collaborazione con cui lo abbiamo raggiunto
+        HashMap<Nodo, InfoDHeap> infoHeap = new HashMap<>();    //Mantiene i riferimenti agli elementi dell'heap per poter poi riuscire ad eseguire una decrease key
+        LinkedList<Collaboration> bestCollaboration = new LinkedList<>();
+        DHeap coda = new DHeap();
+        Nodo radice = nodi.get(actor.getName().toLowerCase()); // Recuperiamo il nodo di origine della visista
+        if(radice != null){                                    //Controlliamo che l'attore sia presente
+            visited.put(radice, new Collaboration(actor, actor));
+            InfoDHeap info = coda.insert(radice, new Double(0.0));
+            infoHeap.put(radice, info);
+            while(!coda.isEmpty()){
+                Nodo x = (Nodo) coda.findMin();
+                coda.deleteMin();
+                bestCollaboration.add(visited.get(x));
+                List<Arco> archi = (List<Arco>)collaborations.archiUscenti(x);  //
+                Iterator<Arco> iterator =  archi.iterator();
+                while(iterator.hasNext()){                              //Per tutti i nodi y adiacenti
+                    Arco arco = iterator.next();
+                    Nodo dest = arco.dest;                              //Recuperiamo y
+                    Collaboration oldCollab = visited.get(dest);        //Recuperiamo la vecchia collaborazione con cui abbiamo raggiunto y
+                    Collaboration collab = (Collaboration)collaborations.infoArco(arco);    
+                    if(oldCollab == null){                              //Se questa non esiste la andiamo ad aggiungere
+                        info = coda.insert(dest, -collab.getScore());          //Usiamo sempre un punteggio negativo in quanto la coda con priorità usa un min-heap
+                        visited.put(dest, collab);
+                        infoHeap.put(dest, info);
+                    }
+                    else if(visited.get(dest).getScore() < collab.getScore()){                //Se il valore di tale collaborazione è minore rispetto a quello di un altra che raggiunge lo stesso nodo
+                        coda.decreaseKey(infoHeap.get(dest), -collab.getScore());             //Andiamo a modificare la collaborazione ed i valori
+                        visited.replace(dest, collab);
+                    }
+                }
+            }
+        }
+        if(bestCollaboration.size()>0)
+            bestCollaboration.removeFirst();    
+        return bestCollaboration.toArray(new Collaboration[bestCollaboration.size()]);
     }
+
 }

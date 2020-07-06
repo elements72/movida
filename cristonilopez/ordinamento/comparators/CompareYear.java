@@ -15,12 +15,6 @@ public class CompareYear implements Comparator<Movie>{
     public int compare(Movie m1, Movie m2){
         Year firstYear = Year.of(m1.getYear());
         Year secondYear = Year.of(m2.getYear());
-        int result = firstYear.compareTo(secondYear);
-        if(result < 0)
-            return -1;
-        else if(result > 0)
-            return 1;
-        else
-            return 0;
+        return firstYear.compareTo(secondYear);
     }
 }

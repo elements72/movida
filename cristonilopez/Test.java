@@ -21,7 +21,7 @@ public class Test {
     }
 
     public static void tests(){
-        String searchActor = "Bruce Willis";
+        String searchActor = "Robert De Niro";
         String searchDirector = "Fabio il fruttivendolo";
         String searchMovie = "pulp fiction";
         String searchString = "Force";
@@ -49,6 +49,7 @@ public class Test {
         //System.out.println("Elimino il film:" + searchMovie + " -> " + core.deleteMovieByTitle(searchMovie) + "\n");
         System.out.println("Collaboratori di:" + searchActor + Arrays.toString(core.getDirectCollaboratorsOf(new Person(searchActor))) + "\n");
         System.out.println("Team di:" + searchActor + Arrays.toString(core.getTeamOf(new Person(searchActor))) + "\n");
+        System.out.println("Miglior collaborazione di:" + searchActor + Arrays.toString(core.maximizeCollaborationsInTheTeamOf(new Person(searchActor))) + "\n");
 
     }
         
