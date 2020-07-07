@@ -577,7 +577,8 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
         HashMap<Nodo, Collaboration> visited = new HashMap<>(); //Associa ad ogni nodo la collaborazione con cui lo abbiamo raggiunto 
         HashMap<Nodo, InfoDHeap> infoHeap = new HashMap<>();    //Mantiene i riferimenti agli elementi dell'heap per poter poi riuscire ad eseguire una decrease key
         DHeap coda = new DHeap();
-        
+        List<Collaboration> out = new LinkedList<>();
+
         Nodo radice = nodi.get(actor.getName().toLowerCase());     //Recuperiamo il nodo di origine della visista
         if(radice != null){                                        //Controlliamo che l'attore sia presente
             visited.put(radice, new Collaboration(actor, actor));  //Nuova collaborazione di un attore con se stesso
@@ -586,6 +587,8 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
             while(!coda.isEmpty()){
                 Nodo x = (Nodo) coda.findMin();
                 coda.deleteMin();
+                out.add(visited.get(x));
+                infoHeap.remove(x);
                 List<Arco> archi = (List<Arco>)collaborations.archiUscenti(x);  //Recuperiamo tutti gli archi uscenti dal nostro nodo
                 Iterator<Arco> iterator =  archi.iterator();                    //Iteriamo su tutti gli archi
                 while(iterator.hasNext()){                                      //Per tutti i nodi y adiacenti
@@ -598,7 +601,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
                         visited.put(dest, collab);
                         infoHeap.put(dest, info);                       //Salviamo in InfoHeap il riferimento per poter poi riuscire ad eseguire la decrease key
                     }
-                    else if(oldCollab.getScore() < collab.getScore()){                //Se il valore di tale collaborazione è minore rispetto a quello di un altra che raggiunge lo stesso nodo
+                    else if(oldCollab.getScore() < collab.getScore() && infoHeap.containsKey(dest)){                //Se il valore di tale collaborazione è minore rispetto a quello di un altra che raggiunge lo stesso nodo
                         coda.decreaseKey(infoHeap.get(dest), -collab.getScore());     //Aggiorno la "distanza"
                         visited.replace(dest, collab);                                //Aggiorno la collaborazione 
                     }
@@ -606,8 +609,9 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
             }
         }
  
-        visited.remove(radice);
-        return visited.values().toArray(new Collaboration[visited.size()]);
+        if(out.size() > 0)
+            out.remove(0);
+        return out.toArray(new Collaboration[out.size()]);
     }
 
 }
