@@ -3,6 +3,7 @@ package movida.cristonilopez;
 import movida.commons.*;
 import movida.cristonilopez.maps.Dizionario;
 import movida.cristonilopez.maps.albero23.Albero23;
+import movida.cristonilopez.maps.ArrayOrdinato;
 import movida.cristonilopez.ordinamento.InsertionSort;
 import movida.cristonilopez.ordinamento.comparators.CompareActiveActor;
 import movida.cristonilopez.ordinamento.comparators.CompareVote;
@@ -32,8 +33,10 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
     protected <T> Dizionario<T> createDizionario(Class<T> c) {
         if (map == MapImplementation.Alberi23)
             return new Albero23<T>(c);
-        else
-            return null; // TODO aggiungere array ordinato
+        else if(map == MapImplementation.ArrayOrdinato){
+            return new ArrayOrdinato<T>(c);
+        } else
+            return null;
     }
 
     @Override
@@ -53,29 +56,32 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
         if (m != map) {
             if (m == MapImplementation.Alberi23 || m == MapImplementation.ArrayOrdinato) {
                 map = m; // Modifichiamo il tipo di dizionario usato
-                Dizionario<Actor> newActors = createDizionario(Actor.class); // Creiamo il nuovo dizionario
-                Dizionario<Movie> newMovies = createDizionario(Movie.class); // Creiamo il nuovo dizionario
-                for (Movie movie : getAllMovies()) { // Inseriamo i film nel nuovo dizionario
-                    newMovies.insert(movie, movie.getTitle());
-                }
-                for (Person actor : getAllPeople()) {
-                    Dizionario<Movie> newStarredMovies = createDizionario(Movie.class); // Cambio l'implementazione
-                                                                                        // anche dei dizionari usati
-                                                                                        // negli attori
-                    Dizionario<Movie> newDirectedMovies = createDizionario(Movie.class);
-                    for (Movie movie : ((Actor) actor).getMoviesStarred()) { // Modifica per i film in cui l'attore ha
-                                                                             // recitato
-                        newStarredMovies.insert(movie, movie.getTitle());
+                if( movies != null && actors != null)
+                {
+                    Dizionario<Actor> newActors = createDizionario(Actor.class); // Creiamo il nuovo dizionario
+                    Dizionario<Movie> newMovies = createDizionario(Movie.class); // Creiamo il nuovo dizionario
+                    for (Movie movie : getAllMovies()) { // Inseriamo i film nel nuovo dizionario
+                        newMovies.insert(movie, movie.getTitle());
                     }
-                    ((Actor) actor).setMoviesStarred(newStarredMovies); // Assegno il nuovo dizionario
-                    for (Movie movie : ((Actor) actor).getMoviesDirected()) { // Modifica per i film diretti
-                        newDirectedMovies.insert(movie, movie.getTitle());
+                    for (Person actor : getAllPeople()) {
+                        Dizionario<Movie> newStarredMovies = createDizionario(Movie.class); // Cambio l'implementazione
+                                                                                            // anche dei dizionari usati
+                                                                                            // negli attori
+                        Dizionario<Movie> newDirectedMovies = createDizionario(Movie.class);
+                        for (Movie movie : ((Actor) actor).getMoviesStarred()) { // Modifica per i film in cui l'attore ha
+                                                                                // recitato
+                            newStarredMovies.insert(movie, movie.getTitle());
+                        }
+                        ((Actor) actor).setMoviesStarred(newStarredMovies); // Assegno il nuovo dizionario
+                        for (Movie movie : ((Actor) actor).getMoviesDirected()) { // Modifica per i film diretti
+                            newDirectedMovies.insert(movie, movie.getTitle());
+                        }
+                        ((Actor) actor).setMoviesDirected(newDirectedMovies);
+                        newActors.insert(((Actor) actor), actor.getName()); // Assegno il nuovo dizionario
                     }
-                    ((Actor) actor).setMoviesDirected(newDirectedMovies);
-                    newActors.insert(((Actor) actor), actor.getName()); // Assegno il nuovo dizionario
+                    movies = newMovies;// Assegno il nuovo dizionario
+                    actors = newActors;// Assegno il nuovo dizionario
                 }
-                movies = newMovies;// Assegno il nuovo dizionario
-                actors = newActors;// Assegno il nuovo dizionario
             }
         }
         return false;

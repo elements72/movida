@@ -16,8 +16,14 @@ public class Test {
         File f1 = new File("movida/commons/esempio-formato-dati-2.txt");   //cammino relativo
         core.loadFromFile(f1);
         tests();    //Funzione con vari test
-
-
+        core.clear();
+        core.setMap(MapImplementation.ArrayOrdinato);
+        System.out.println("array ordinato");
+        core = new MovidaCore();
+        core.loadFromFile(f);
+        tests();    //Funzione con vari test
+        core.loadFromFile(f1);
+        tests();    //Funzione con vari test
     }
 
     public static void tests(){
