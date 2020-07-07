@@ -7,9 +7,8 @@ import movida.cristonilopez.maps.asdlab.CodePriorita.DHeap.InfoDHeap;
 import movida.cristonilopez.maps.asdlab.Grafi.*;
 import movida.cristonilopez.maps.albero23.Albero23;
 import movida.cristonilopez.ordinamento.InsertionSort;
-import movida.cristonilopez.ordinamento.comparators.CompareActiveActor;
-import movida.cristonilopez.ordinamento.comparators.CompareVote;
-import movida.cristonilopez.ordinamento.comparators.CompareYear;
+import movida.cristonilopez.ordinamento.comparators.*;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -134,7 +133,6 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
 
             Movie result = new Movie(title, year, votes, cast, director);
             
-            Test.stampa(result);
 
             tempMovies.insert(result, title); 
 
@@ -555,7 +553,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
                 Nodo x = frontiera.poll();
                 team.add((Person)collaborations.infoNodo(x));   //Aggiungiamo l'attore al team
                 visited.putIfAbsent(x, true);
-                List<Arco> archi = (List<Arco>)collaborations.archiUscenti(x);  //
+                List<Arco> archi = (List<Arco>)collaborations.archiUscenti(x);  
                 Iterator<Arco> iterator =  archi.iterator();
                 while(iterator.hasNext()){
                     Arco arco = iterator.next();
@@ -585,23 +583,23 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
             InfoDHeap info = coda.insert(radice, new Double(0.0)); //Poniamo la radice a distanza 0
             infoHeap.put(radice, info);
             while(!coda.isEmpty()){
-                Nodo x = (Nodo) coda.findMin();
-                coda.deleteMin();
-                out.add(visited.get(x));
-                infoHeap.remove(x);
+                Nodo x = (Nodo) coda.findMin();     //Recupero il minimo
+                coda.deleteMin();                   //Lo elimino
+                out.add(visited.get(x));            //Lo aggiungo a quello che sarà l'output finale
+                infoHeap.remove(x);                 //Rimuovo il suo riferimento da infoHeap in quanto il nodo è ormai nel nostro "MST"
                 List<Arco> archi = (List<Arco>)collaborations.archiUscenti(x);  //Recuperiamo tutti gli archi uscenti dal nostro nodo
                 Iterator<Arco> iterator =  archi.iterator();                    //Iteriamo su tutti gli archi
                 while(iterator.hasNext()){                                      //Per tutti i nodi y adiacenti
                     Arco arco = iterator.next();
                     Nodo dest = arco.dest;                              //Recuperiamo il nodo adiacente
                     Collaboration oldCollab = visited.get(dest);        //Recuperiamo la vecchia collaborazione con cui abbiamo raggiunto y
-                    Collaboration collab = (Collaboration)collaborations.infoArco(arco);    
-                    if(oldCollab == null){                              //Se questa non esiste la andiamo ad aggiungere
-                        info = coda.insert(dest, -collab.getScore());   //Usiamo sempre un punteggio negativo in quanto la coda con priorità usa un min-heap
-                        visited.put(dest, collab);
+                    Collaboration collab = (Collaboration)collaborations.infoArco(arco); //Recuperiamo la collaborazione che unisce x ad y
+                    if(oldCollab == null){                              //Se non avevamo ancora raggiunto y
+                        info = coda.insert(dest, -collab.getScore());   //Inseriamo nella coda y, usiamo sempre un punteggio negativo in quanto la coda con priorità usa un min-heap
+                        visited.put(dest, collab);                      //Salviamo la collaborazione con cui abbiamo raggiunto y
                         infoHeap.put(dest, info);                       //Salviamo in InfoHeap il riferimento per poter poi riuscire ad eseguire la decrease key
                     }
-                    else if(oldCollab.getScore() < collab.getScore() && infoHeap.containsKey(dest)){                //Se il valore di tale collaborazione è minore rispetto a quello di un altra che raggiunge lo stesso nodo
+                    else if(oldCollab.getScore() < collab.getScore() && infoHeap.containsKey(dest)){   //Se il valore di tale collaborazione è minore rispetto a quello di un altra che raggiunge lo stesso nodo
                         coda.decreaseKey(infoHeap.get(dest), -collab.getScore());     //Aggiorno la "distanza"
                         visited.replace(dest, collab);                                //Aggiorno la collaborazione 
                     }
@@ -609,7 +607,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
             }
         }
  
-        if(out.size() > 0)
+        if(out.size() > 0)  //Eliminiamo il primo elemento in quanto rappresenta la collaborazione di actor con se stesso 
             out.remove(0);
         return out.toArray(new Collaboration[out.size()]);
     }

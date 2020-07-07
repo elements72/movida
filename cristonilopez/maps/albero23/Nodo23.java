@@ -120,7 +120,7 @@ public class Nodo23 extends Nodo{
             String key = nodo.getKey();
             for (int i = 0; i < keys.length; i++) {
                 if(keys[i] == null){
-                    if(nodo instanceof Foglia23){               //Se sto inserendo una foglia
+                    if(nodo instanceof Foglia23){                     //Se sto inserendo una foglia
                         Foglia23<?> foglia = ((Foglia23<?>)figli[i]); //Consideriamo la foglia nella posizione i
                         if(foglia == null){
                             figli[i] = nodo;
@@ -132,7 +132,7 @@ public class Nodo23 extends Nodo{
                         }
                         else {
                             figli[i+1] = nodo;                  //Se la nostra nuova foglia presenta un valore maggiore
-                            keys[i] = foglia.getKey();               //inseriamo la sua chiave e la inseriamo come figlio più a
+                            keys[i] = foglia.getKey();          //inseriamo la sua chiave e la inseriamo come figlio più a
                         }
                         break;
                     }
@@ -152,7 +152,7 @@ public class Nodo23 extends Nodo{
                         break;
                     }
                 }
-                else if(keys[i].compareToIgnoreCase(key) > 0){                    //Se la chiave legata la nodo/foglia è minore di una già presente in keys
+                else if(keys[i].compareToIgnoreCase(key) > 0){           //Se la chiave legata la nodo/foglia è minore di una già presente in keys
                     //Shift di figli e chiavi                           //Eseguo uno shift verso destra di chiavi e figli    
                     int j;
                     for( j = this.grado(); j>i; j--){

@@ -21,7 +21,7 @@ public class Test {
     }
 
     public static void tests(){
-        String searchActor = "Matthew McConaughey";
+        String searchActor = "Glenn Close";
         String searchDirector = "Fabio il fruttivendolo";
         String searchMovie = "";
         String searchString = "Force";
