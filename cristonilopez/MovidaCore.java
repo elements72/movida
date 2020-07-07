@@ -112,7 +112,11 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
         }
         if (actors == null) {
             actors = createDizionario(Actor.class);
-        } 
+        }
+        if (collaborations == null) {
+            this.collaborations = new GrafoLA();
+            this.nodi = new HashMap<>(); 
+        }
 
         Dizionario<Movie> tempMovies = createDizionario(Movie.class); 
 
@@ -186,8 +190,12 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
                 for(Person a: oldMovie.getCast()) //controlo se un attore non fa più farte del cast e nel caso lo rimuovo
                 {
                     Actor tempActor = (Actor)a;
-                    if(((Actor) a).searchStarredMovie(oldMovie.getTitle()) == oldMovie){
-                        tempActor.deleteMoviesStarred(oldMovie.getTitle());
+                    if(((Actor) a).searchStarredMovie(oldMovie.getTitle()) == oldMovie){    //Se il riferimento al film non è stato modificato 
+                        tempActor.deleteMoviesStarred(oldMovie.getTitle());                 //L'attore non è presente nel nuovo cast
+                        for (Person b : oldMovie.getCast()) {
+                            if(b != a)                               //Rimuoviamo le sue collaborazioni
+                                deleteCollaboration(a, b, oldMovie);
+                        }
                         tryDeleteActor(tempActor);
                     }
                 }
@@ -200,8 +208,9 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
             }
 
             movies.insert(temp, temp.getTitle()); //aggiungo il film nella struttura principale
+            createMovieCollaboration(temp);       //Creo le collaborazioni per quel film
         }
-        createCollaborations();
+        //createCollaborations();
         file.close();
     }
 
@@ -462,6 +471,17 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
         }
     }
 
+    protected void createMovieCollaboration(Movie movie){
+        Person[] cast = movie.getCast();
+        for (int i = 0; i < cast.length - 1; i++) { // Ciclo su tutte le possibili coppie
+            for (int j = i + 1; j < cast.length; j++) {
+                Person a = cast[i];
+                Person b = cast[j];
+                createCollaboration(a, b, movie);
+            }
+        }
+    }
+
     /**
      * Dati due attori e un film il metodo crea la Collaboration tra loro se non esisite, altrimenti
      * aggiunge il film alla collaborazione esistente
@@ -477,7 +497,8 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
             Arco arco = collaborations.sonoAdiacenti(nodoA, nodoB);     
             if(arco != null){
                 Collaboration collab = (Collaboration) collaborations.infoArco(arco);   //Se sono adiacenti esiste già una collaborazione
-                collab.addMovie(movie);                       //Aggiungiamo il movie alla lista dei film
+                if(!collab.searchMovie(movie))
+                    collab.addMovie(movie);                       //Aggiungiamo il movie alla lista dei film
             }
             else
                 newCollabF = true;

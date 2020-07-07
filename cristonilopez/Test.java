@@ -12,7 +12,7 @@ public class Test {
         File f = new File("movida/commons/esempio-formato-dati.txt"); // cammino relativo
         core = new MovidaCore();
         core.loadFromFile(f);
-        //tests(); // Funzione con vari test
+        tests(); // Funzione con vari test
         File f1 = new File("movida/commons/esempio-formato-dati-2.txt"); // cammino relativo
         core.loadFromFile(f1);
         tests(); // Funzione con vari test
@@ -21,9 +21,9 @@ public class Test {
     }
 
     public static void tests(){
-        String searchActor = "Uma Thurman";
+        String searchActor = "Samuel L. Jackson";
         String searchDirector = "Fabio il fruttivendolo";
-        String searchMovie = "pulp fiction";
+        String searchMovie = "";
         String searchString = "Force";
         Integer anno = new Integer(1997);
         int N = 20;

@@ -44,6 +44,10 @@ public class Collaboration {
 		return movies.isEmpty();
 	}
 
+	public boolean searchMovie(Movie movie){
+		return movies.indexOf(movie) == -1 ? false : true;
+	}
+
 	@Override
 	public String toString() {
 		return actorA.getName() + "+" + actorB.getName() + "  score:"+ getScore()+"\n";
