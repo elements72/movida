@@ -17,7 +17,7 @@ Due algoritmi di ordinamento:
 * **Insertion Sort**
 * **Heap Sort** 
 
-Due Implementazioni di strutture dati classiche:
+Due strutture dati classiche:
 * **Alberi 2-3**
 * **Array Ordinato**
 
