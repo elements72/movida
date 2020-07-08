@@ -22,9 +22,11 @@ Movida parte principale:
         1)Movies che mantiene i dati relativi ai film
         2)Actors che mantiene le informazioni relative agli attori
 
-    Si è deciso di mantenere per ogni attore i riferimenti ai film nei quali ha recitato/diretto, per mantenere tali riferimeti sono state adottate le medesime strutture di Movies e Actors.
+    Si è deciso di mantenere per ogni attore i riferimenti ai film nei quali ha recitato/diretto, per mantenere tali riferimeti sono state adottate le medesime strutture di Movies e Actors. 
 
     A discapito quindi di un maggior utilizzo di memoria e di una maggiore attenzione per quanto riguarda l'aggiornamento o l'aggiunta di nuovi dati abbiamo avuto la possibilità di eseguire operazioni come "searchMoviesStarredBy", "searchMoviesStarredBy"... in modo immediato.
+
+    Le operazioni che invece richiedevano un ordinamento dei dati sono state soddisfate utilizzando dei "Comparators" che permettono di avere un unico codice per l'ordinamento dei dati il quale cambia la sua politica di ordinamento in base al comparator che viene fornito. 
 
 
 Movida grafi:
