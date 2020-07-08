@@ -12,6 +12,7 @@ Progetto svillupato da:
 ## Introduzione:
 
 Nella nostra implementazione del progetto movida abbiamo implementato:
+
 Due algoritmi di ordinamento:
 * **Insertion Sort**
 * **Heap Sort** 
