@@ -5,7 +5,7 @@ Progetto svillupato da:
     Antonio Lopez: 0000915711
     Davide Cristoni:
 
-Introduzione:
+## Introduzione:
 
     Nella nostra implementazione del progetto movida abbiamo implementato:
         Due algoritmi di ordinamento:
@@ -16,7 +16,7 @@ Introduzione:
         2)Array Ordinato
 
 
-Movida parte principale:  
+## Movida parte principale:  
 
     I dati all'interno del progetto sono mantenuti in due strutture distinte:
         1)Movies che mantiene i dati relativi ai film
@@ -29,7 +29,7 @@ Movida parte principale:
     Le operazioni che invece richiedevano un ordinamento dei dati sono state soddisfate utilizzando dei "Comparators" che permettono di avere un unico codice per l'ordinamento dei dati il quale cambia la sua politica di ordinamento in base al comparator che viene fornito. 
 
 
-Movida grafi:
+## Movida grafi:
 
     Nella parte riguardante l'estensione grafi del progetto movida ogni attore è visto come un nodo di un grafo ed ogni arco è una collaborazione.
 
