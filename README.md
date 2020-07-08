@@ -1,8 +1,12 @@
 # Movida
 MOVIDA (MOVIes Data and Algorithms)
 
-Progetto svillupato da: 
+https://github.com/elements72/movida
+
+Progetto svillupato da:
+
 **Antonio Lopez: 0000915711**
+
 **Davide Cristoni:**
 
 ## Introduzione:
