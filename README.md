@@ -22,13 +22,13 @@ I dati all'interno del progetto sono mantenuti in due strutture distinte:
 * **Movies** che mantiene i dati relativi ai film
 * **Actors** che mantiene le informazioni relative agli attori
 
-Si è deciso di mantenere per ogni attore i riferimenti ai film nei quali ha recitato/diretto, per mantenere tali riferimeti sono state adottate le medesime    
-strutture di Movies e Actors. 
+Si è deciso di mantenere per ogni attore i riferimenti ai film nei quali ha recitato/diretto,
+per mantenere tali riferimeti sono state adottate le medesime    strutture di Movies e Actors. 
 
 A discapito quindi di un maggior utilizzo di memoria e di una maggiore attenzione per quanto riguarda l'aggiornamento o l'aggiunta di nuovi dati abbiamo avuto 
-la possibilità di eseguire operazioni come "searchMoviesStarredBy", "searchMoviesStarredBy"... in modo immediato.
+la possibilità di eseguire operazioni come **"searchMoviesStarredBy", "searchMoviesStarredBy"**... in modo immediato.
 
-Le operazioni che invece richiedevano un ordinamento dei dati sono state soddisfate utilizzando dei "Comparators" che permettono di avere un unico codice per 
+Le operazioni che invece richiedevano un ordinamento dei dati sono state soddisfate utilizzando dei **"Comparators"** che permettono di avere un unico codice per 
 l'ordinamento dei dati il quale cambia la sua politica di ordinamento in base al comparator che viene fornito. 
 
 
@@ -49,5 +49,5 @@ La classe collaboration è stata modificata in modo tale da permettere di aggiun
 Ogni qualvolta vi è una collaborazione tra due attori A e B viene controllato se questi hanno già collaborato in altri film,
  se così fosse viene aggiunto il nuovo film tra quelli in cui hanno collaborato.
 
-Un arco (x, y) contiene il riferimento alla collaborazione tra l'attore x e l'attore y.
+Un arco **(x, y)** contiene il riferimento alla collaborazione tra l'attore x e l'attore y.
 Il suo "costo" è dato da "getScore" ovvero la media dei voti ricevuti dai film in cui hanno partecipato insieme. 
