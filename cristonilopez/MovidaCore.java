@@ -218,46 +218,48 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
 
     @Override
     public void saveToFile(File f) { //TODO da testare
-        FileWriter file;
-        try{
-            file = new FileWriter(f);
-        } catch(Exception e) {
-            throw new MovidaFileException();
-        }  //TODO aggiungere controllo per lanciare eccezioni
-        int c = 0;
-        for(Movie m: movies.toArray())
-        {
-            String toWrite = "";
-            toWrite += "Title: " + m.getTitle() + '\n'; //inseriamo il titolo;
-            toWrite += "Year: " + m.getYear() + '\n'; //inseriamo l'anno
-            toWrite += "Director: " + m.getDirector().getName() + '\n'; //inserisco il regista
-            toWrite += "Cast: "; //inseriamo gli attori
-            Person[] cast = m.getCast();
-            for(int i=0; i<cast.length; i++)
-            {
-                toWrite += cast[i].getName();
-                if( (i + 1) != cast.length ){ //se non è l'ultimo attore
-                    toWrite += ", ";          //inserisce i caratteri tra un attore e l'altro
-                }
-                else{                         //se è l'ultimo attore
-                    toWrite += '\n';          //chiude la linea
-                }
-            }
-            toWrite += "Votes: " + m.getVotes() + '\n';
-            if((c + 1) != movies.toArray().length){ //se non è l'ultimo elemento
-                toWrite += '\n';                    //inserisci una riga vuota
-            }
-            c++;
+        if(movies != null && actors != null){
+            FileWriter file;
             try{
-            file.write(toWrite);
+                file = new FileWriter(f);
+            } catch(Exception e) {
+                throw new MovidaFileException();
+            }  //TODO aggiungere controllo per lanciare eccezioni
+            int c = 0;
+            for(Movie m: movies.toArray())
+            {
+                String toWrite = "";
+                toWrite += "Title: " + m.getTitle() + '\n'; //inseriamo il titolo;
+                toWrite += "Year: " + m.getYear() + '\n'; //inseriamo l'anno
+                toWrite += "Director: " + m.getDirector().getName() + '\n'; //inserisco il regista
+                toWrite += "Cast: "; //inseriamo gli attori
+                Person[] cast = m.getCast();
+                for(int i=0; i<cast.length; i++)
+                {
+                    toWrite += cast[i].getName();
+                    if( (i + 1) != cast.length ){ //se non è l'ultimo attore
+                        toWrite += ", ";          //inserisce i caratteri tra un attore e l'altro
+                    }
+                    else{                         //se è l'ultimo attore
+                        toWrite += '\n';          //chiude la linea
+                    }
+                }
+                toWrite += "Votes: " + m.getVotes() + '\n';
+                if((c + 1) != movies.toArray().length){ //se non è l'ultimo elemento
+                    toWrite += '\n';                    //inserisci una riga vuota
+                }
+                c++;
+                try{
+                file.write(toWrite);
+                } catch(Exception e) {
+                    throw new MovidaFileException();
+                }
+            }
+            try{
+                file.close();
             } catch(Exception e) {
                 throw new MovidaFileException();
             }
-        }
-        try{
-            file.close();
-        } catch(Exception e) {
-            throw new MovidaFileException();
         }
     }
 
