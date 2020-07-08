@@ -13,15 +13,30 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
     }
 
     @Override
-    public void insert(T element, String key) {
-        Coppia[] temp = new Coppia[S.length];
-        for(int i = 0, j = 0; j < S.length; i++, j++) 
+    public void insert(T element, String key) { //TODO riguardarlo, non mi fido
+        Coppia[] temp = new Coppia[S.length + 1];
+        if(S.length == 0){ //caso del primo elemento
+            temp[0] = new Coppia(element, key);
+        } 
+        else if(cercaOmonimia(key) >= 0){
+            int i = cercaOmonimia(key);
+            S[i] = new Coppia(element, key);
+            return;
+        }
+        else
         {
-            if(key.compareToIgnoreCase(S[j].getKey()) <= 0 && i == j){ 
-                temp[i] = new Coppia(element, key);
-                i++;
+            int i = 0, j = 0;
+            for(; j < S.length; i++, j++) //potrei renderlo un while a questo punto ..
+            {
+                if(i == j && key.compareToIgnoreCase(S[j].getKey()) <= 0){ 
+                    temp[i] = new Coppia(element, key);
+                    i++;
+                }
+                temp[i] = S[j];
             }
-            temp[i] = S[j];
+            if(i == j){ //nel caso la posizione da inserire la coppia sia la casella extra rispeto a S
+                temp[i] = new Coppia(element, key);
+            }
         }
         S = temp;
     }
@@ -88,4 +103,19 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
         }
     }
     
+    private int cercaOmonimia(String key){
+        if(S.length == 0){
+            return -1;
+        }
+        else
+        {
+            for(int i = 0; i < S.length; i++)
+            {
+                if(key.compareToIgnoreCase(S[i].getKey()) == 0){
+                    return i;
+                }
+            }
+            return -1;
+        }
+    }
 }

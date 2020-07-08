@@ -18,8 +18,7 @@ public class Test {
         tests();    //Funzione con vari test
         core.clear();
         core.setMap(MapImplementation.ArrayOrdinato);
-        System.out.println("array ordinato");
-        core = new MovidaCore();
+        System.out.println("array ordinato\n");
         core.loadFromFile(f);
         tests();    //Funzione con vari test
         core.loadFromFile(f1);

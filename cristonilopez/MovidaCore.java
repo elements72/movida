@@ -31,8 +31,9 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
     }
 
     protected <T> Dizionario<T> createDizionario(Class<T> c) {
-        if (map == MapImplementation.Alberi23)
+        if (map == MapImplementation.Alberi23){
             return new Albero23<T>(c);
+        }
         else if(map == MapImplementation.ArrayOrdinato){
             return new ArrayOrdinato<T>(c);
         } else
@@ -358,6 +359,10 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
         }
         most = Arrays.copyOfRange(A, 0, N); // Copio gli N elementi con voti maggiori
         return most;
+    }
+
+    public MapImplementation getMap(){
+        return map;
     }
 
 }
