@@ -13,12 +13,6 @@ public class CompareTitle implements Comparator<Movie>{
 
     @Override
     public int compare(Movie m1, Movie m2){
-        int result = m1.getTitle().compareToIgnoreCase(m2.getTitle());
-        if(result < 0)
-            return -1;
-        else if(result > 0)
-            return 1;
-        else
-            return 0;
+        return  m1.getTitle().compareToIgnoreCase(m2.getTitle());
     }
 }

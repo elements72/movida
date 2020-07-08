@@ -9,21 +9,21 @@ public class Test {
     static MovidaCore core;
 
     public static void main(String[] args) {
-        File f = new File("movida/commons/esempio-formato-dati.txt");   //cammino relativo
+        File f = new File("movida/commons/esempio-formato-dati.txt"); // cammino relativo
         core = new MovidaCore();
         core.loadFromFile(f);
-        tests();    //Funzione con vari test
-        File f1 = new File("movida/commons/esempio-formato-dati-2.txt");   //cammino relativo
+        //tests(); // Funzione con vari test
+        File f1 = new File("movida/commons/esempio-formato-dati-2.txt"); // cammino relativo
         core.loadFromFile(f1);
-        tests();    //Funzione con vari test
-
-
+        tests(); // Funzione con vari test
+        File fout = new File("movida/cristonilopez/esempio-scrittura-dati.txt");
+        core.saveToFile(fout);
     }
 
     public static void tests(){
-        String searchActor = "Uma thurman";
+        String searchActor = "Glenn Close";
         String searchDirector = "Fabio il fruttivendolo";
-        String searchMovie = "Cape Fear";
+        String searchMovie = "";
         String searchString = "Force";
         Integer anno = new Integer(1997);
         int N = 20;
@@ -45,8 +45,11 @@ public class Test {
         System.out.println(N + " Film più recenti:" + Arrays.toString(core.searchMostRecentMovies(N)) + "\n");
         System.out.println(N + " Film più votati:" + Arrays.toString(core.searchMostVotedMovies(N)) + "\n");
         System.out.println("Film contenenti la stringa:" + searchString
-                + Arrays.toString(core.searchMoviesByTitle(searchString)) + "\n");
+        + Arrays.toString(core.searchMoviesByTitle(searchString)) + "\n");
         System.out.println("Elimino il film:" + searchMovie + " -> " + core.deleteMovieByTitle(searchMovie) + "\n");
+        System.out.println("Collaboratori di:" + searchActor + Arrays.toString(core.getDirectCollaboratorsOf(new Person(searchActor))) + "\n");
+        System.out.println("Team di:" + searchActor + Arrays.toString(core.getTeamOf(new Person(searchActor))) + "\n");
+        System.out.println("Miglior collaborazione di:" + searchActor + Arrays.toString(core.maximizeCollaborationsInTheTeamOf(new Person(searchActor))) + "\n");
 
     }
         
