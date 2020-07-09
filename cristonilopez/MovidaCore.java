@@ -457,26 +457,10 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
         return most;
     }
 
- 
-    /** 
-     * Create collaborations crea le collaborazioni e il grafo a queste associate
-    */
-    protected void createCollaborations(){
-        this.collaborations = new GrafoLA();
-        this.nodi = new HashMap<>();
-        Movie[] Movies = getAllMovies();
-        for (Movie movie : Movies) {                // Per ogni film vado a creare le collaborazioni tra gli autori
-            Person[] cast = movie.getCast();        //Prendo tutte le persone del cast
-            for (int i = 0; i < cast.length - 1; i++) {   //Ciclo su tutte le possibili coppie
-                for (int j = i + 1; j < cast.length; j++) {
-                    Person a = cast[i];                     
-                    Person b = cast[j];
-                    createCollaboration(a, b, movie);
-                }
-            }
-        }
-    }
-
+ /**
+  * Crea tutte le collavorazioni in un film
+  * @param movie film di cui si vogliono creare le collaborazioni
+  */
     protected void createMovieCollaboration(Movie movie){
         Person[] cast = movie.getCast();
         for (int i = 0; i < cast.length - 1; i++) { // Ciclo su tutte le possibili coppie

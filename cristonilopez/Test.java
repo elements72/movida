@@ -12,7 +12,9 @@ public class Test {
         File f = new File("movida/commons/esempio-formato-dati.txt"); // cammino relativo
         core = new MovidaCore();
         core.loadFromFile(f);
-        //tests(); // Funzione con vari test
+        core.clear();
+        core.loadFromFile(f);
+        tests(); // Funzione con vari test
         File f1 = new File("movida/commons/esempio-formato-dati-2.txt"); // cammino relativo
         core.loadFromFile(f1);
         tests(); // Funzione con vari test
