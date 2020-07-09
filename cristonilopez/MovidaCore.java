@@ -212,7 +212,6 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
             movies.insert(temp, temp.getTitle()); //aggiungo il film nella struttura principale
             createMovieCollaboration(temp);       //Creo le collaborazioni per quel film
         }
-        //createCollaborations();
         file.close();
     }
 
