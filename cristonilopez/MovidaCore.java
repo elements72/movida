@@ -5,6 +5,7 @@ import movida.cristonilopez.maps.Dizionario;
 import movida.cristonilopez.maps.albero23.Albero23;
 import movida.cristonilopez.maps.ArrayOrdinato;
 import movida.cristonilopez.ordinamento.InsertionSort;
+import movida.cristonilopez.ordinamento.HeapSort;
 import movida.cristonilopez.ordinamento.comparators.CompareActiveActor;
 import movida.cristonilopez.ordinamento.comparators.CompareVote;
 import movida.cristonilopez.ordinamento.comparators.CompareYear;
@@ -125,7 +126,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
 
             Movie result = new Movie(title, year, votes, cast, director);
             
-            Test.stampa(result);
+            //Test.stampa(result);
 
             tempMovies.insert(result, title); 
 
@@ -354,6 +355,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
         if (sort == SortingAlgorithm.InsertionSort) {
             InsertionSort.sort(A, c);
         } else {
+            HeapSort.sort(A, c);
             // TODO richiamo all'heap sort (hint per Davide l'heap sort dopo N delete max ha
             // finito (vedi heapselect))
         }

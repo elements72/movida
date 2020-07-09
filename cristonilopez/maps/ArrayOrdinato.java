@@ -110,13 +110,13 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
     
     private int cerca(String key, int i, int j){ //TODO finire la ricerca dicotomica e implementarla
         if(S.length == 0 || i > j){
-            return -1;
+            return i;
         }
         else{
             int temp = (i + j) / 2; // j è a lunghezza dell'array, noi vogliamo il l'indice massimo
-            int compare = key.compareToIgnoreCase(S[i].getKey());
+            int compare = key.compareToIgnoreCase(S[temp].getKey());
             if(compare == 0){
-                return i;
+                return temp;
             } else if(compare < 0){
                 return cerca(key, i, temp - 1);
             } else {
