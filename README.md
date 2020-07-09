@@ -12,11 +12,12 @@ Progetto svillupato da:
 ## Introduzione:
 
 Nella nostra implementazione del progetto movida abbiamo implementato:
+
 Due algoritmi di ordinamento:
 * **Insertion Sort**
 * **Heap Sort** 
 
-Due Implementazioni di strutture dati classiche:
+Due strutture dati classiche:
 * **Alberi 2-3**
 * **Array Ordinato**
 
