@@ -6,13 +6,18 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
 
     Coppia[] S = new Coppia[0];
 
-    Class typeClass;
+    Class<T> typeClass;
 
+    /**
+     * Costrutore dell'array ordinato
+     * 
+     * @param typeClass Classe del tipo non primitivo che userà la struttura
+     */
     public ArrayOrdinato(Class<T> typeClass){
         this.typeClass = typeClass;
     }
 
-    @Override
+   @Override
     public void insert(T element, String key) { //TODO riguardarlo, non mi fido
         Coppia[] temp = new Coppia[S.length + 1];
         if(S.length == 0){ //caso del primo elemento
@@ -28,7 +33,7 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
             int i = 0, j = 0;
             for(; j < S.length; i++, j++) //potrei renderlo un while a questo punto ..
             {
-                if(i == j && key.compareToIgnoreCase(S[j].getKey()) <= 0){ 
+                if(i == j && key.compareToIgnoreCase(S[j].getKey()) <= 0){ //TODO fare ricerca dicotomica
                     temp[i] = new Coppia(element, key);
                     i++;
                 }
@@ -103,8 +108,30 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
         }
     }
     
+    private int cerca(String key, int i, int j){ //TODO finire la ricerca dicotomica e implementarla
+        if(S.length == 0 || i > j){
+            return -1;
+        }
+        else{
+            int temp = (i + j) / 2; // j è a lunghezza dell'array, noi vogliamo il l'indice massimo
+            int compare = key.compareToIgnoreCase(S[i].getKey());
+            if(compare == 0){
+                return i;
+            } else if(compare < 0){
+                return cerca(key, i, temp - 1);
+            } else {
+                return cerca(key, temp + 1, j);
+            }
+        }
+    }
+
+    /**
+     * Cerca se nell'array è presente un omonimia
+     * @param key Stringa sulla quale controllare il caso di un omonima
+     * @return indice della casella che ha come chiave il parametro dato, -1 se non ci sono omonimie
+     */
     private int cercaOmonimia(String key){
-        if(S.length == 0){
+if(S.length == 0){
             return -1;
         }
         else
