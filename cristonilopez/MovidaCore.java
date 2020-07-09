@@ -334,7 +334,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
         Nodo nodoA = nodi.get(a.getName().toLowerCase()); // Cerchiamo i nostri nodi nella hash map
         Nodo nodoB = nodi.get(b.getName().toLowerCase());
         Arco arcoAB = collaborations.sonoAdiacenti(nodoA, nodoB); // Ricerchiamo i nostri archi
-        Arco arcoBA = collaborations.sonoAdiacenti(nodoA, nodoB);
+        Arco arcoBA = collaborations.sonoAdiacenti(nodoB, nodoA);
         Collaboration collab = (Collaboration) collaborations.infoArco(arcoAB);
         collab.deleteMovie(movie); // Rimuoviamo il film dalla collaborazione
         if (collab.isEmpty()) { // Se non vi è alcun film in cui gli attori hanno recitato insieme

@@ -23,9 +23,9 @@ public class Test {
     }
 
     public static void tests(){
-        String searchActor = "Glenn Close";
+        String searchActor = "franchino";
         String searchDirector = "Fabio il fruttivendolo";
-        String searchMovie = "";
+        String searchMovie = "pulp fiction";
         String searchString = "Force";
         Integer anno = new Integer(1997);
         int N = 20;
