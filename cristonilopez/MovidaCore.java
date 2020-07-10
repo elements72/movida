@@ -349,22 +349,33 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch {
      * @return Array di lunghezza N ordinato secondo <code>c</code>
      */
     protected <T> T[] ordina(T[] A, Integer N, Comparator<T> c) {
-        if (N > A.length) // Se N è maggiore del numero di film a disposizione, andiamo ad elencarli tutti
+        if (N > A.length || N < 0) // Se N è maggiore del numero di film a disposizione o un numero negativo, andiamo ad elencarli tutti
             N = A.length;
         T[] most;
         if (sort == SortingAlgorithm.InsertionSort) {
             InsertionSort.sort(A, c);
+            most = Arrays.copyOfRange(A, 0, N);
         } else {
-            HeapSort.sort(A, c);
-            // TODO richiamo all'heap sort (hint per Davide l'heap sort dopo N delete max ha
-            // finito (vedi heapselect))
+            HeapSort.sort(A, N, c.reversed());
+            most = Arrays.copyOfRange(A, A.length - N, A.length);
+            reverse(most);
         }
-        most = Arrays.copyOfRange(A, 0, N); // Copio gli N elementi con voti maggiori
+         // Copio gli N elementi con voti maggiori
         return most;
     }
 
     public MapImplementation getMap(){
         return map;
+    }
+
+    private <T> void reverse(T[] A){
+        int i = 0, j = A.length - 1;
+        for (; i < j; i++, j--) 
+        {
+            T scambia = A[i];
+            A[i] = A[j];
+            A[j] = scambia;
+        } 
     }
 
 }

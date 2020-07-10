@@ -106,4 +106,8 @@ public class Actor extends Person{
         return moviesDirected == null ? 0 : moviesDirected.count();
     }
 
+    @Override
+    public String toString(){
+        return super.toString() + " " + moviesStarred.count();
+    }
 }
