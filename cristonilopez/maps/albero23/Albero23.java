@@ -238,56 +238,6 @@ public class Albero23<T> implements Dizionario<T>{
         return A;
     }
 
-    /**
-     * Fornisce l'altezza dell'albero
-     * @return
-     */
-    protected int height(){
-        Nodo tmp = radice;
-        int h = 1;
-        while(!tmp.isLeaf()){
-            tmp = ((Nodo23)tmp).figli[0];
-            h++;
-        }
-        return h++;
-    }
-
-    //Funzione brutte da rimuovere usate solo per avere qualche riferimento grafico
-    protected void printTreeRec(Nodo nodo, int level, int h, int current){
-        if(level < 1){
-            return;
-        }
-        else if(level == 1){
-            System.out.print(nodo.toString() + " ");
-            for (int i = 1; i < (h-current); i++) {
-                System.out.print("\t");
-            }
-        }
-        if(nodo instanceof Nodo23)
-            for (int i = 0; i < ((Nodo23)nodo).grado(); i++){
-                printTreeRec(((Nodo23)nodo).figli[i], level-1, h, current);
-            }
-            if(level == current - 1){
-                for (int i = 0; i < current-1; i++) {
-                    System.out.print("\t");
-                }
-            }
-
-    }
-
-    public void printTree(){
-        int h = height();
-        for (int i = 0; i < h; i++) {
-            for (int j = 0; j < (h - i); j++) {
-                System.out.print("\t");
-            }
-            if(i == h-1)
-                System.out.print("\t");
-            printTreeRec(radice, i+1, h, i);
-            System.out.println();
-            System.out.println();
-        } 
-    }
 
     public int count(){
         return nNodi;

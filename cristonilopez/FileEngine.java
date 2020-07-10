@@ -17,6 +17,9 @@ public class FileEngine {
         try
         {
         String temp = file.nextLine();
+        if(temp.indexOf("Votes:") != 0){
+            throw new MovidaFileException();
+        }
         int votes = 0;
         temp = temp.substring(temp.indexOf(':')+1);
         for(int i = 0; i<temp.length(); i++)
@@ -46,6 +49,9 @@ public class FileEngine {
         try
         {
             String cast = file.nextLine();
+            if(cast.indexOf("Cast:") != 0){
+                throw new MovidaFileException();
+            }
             cast = cast.substring(cast.indexOf(' ')); //non gestisco il +1 perché lo gestisco direttamente nel ciclo
             int i= 1, j=0;
             while(cast.indexOf(',', j+1) > 0)
@@ -91,6 +97,9 @@ public class FileEngine {
     public static Person getDirector(Scanner file) {
         try{
         String directortemp = file.nextLine();
+        if(directortemp.indexOf("Director:") != 0){
+            throw new MovidaFileException();
+        }
         directortemp = directortemp.substring(directortemp.indexOf(' ')+1);
         directortemp = fromTabToSpace(directortemp).trim();
         Person director = new Person(directortemp);
@@ -113,6 +122,9 @@ public class FileEngine {
         try
         {
         String temp = file.nextLine();
+        if(temp.indexOf("Year:") != 0){
+            throw new MovidaFileException();
+        }
         temp = temp.substring(temp.indexOf(':')+1);
         Integer year = 0; //prende la riga contenente l'anno di pubblicaazione, ritaglia via la stringa iniziale e converte in int
         for(int i = 0; i<temp.length(); i++)
@@ -141,6 +153,9 @@ public class FileEngine {
         try
         {
         String title = file.nextLine();
+        if(title.indexOf("Title:") != 0){
+            throw new MovidaFileException();
+        }
         title = title.substring(title.indexOf(' ')+1);
         title = fromTabToSpace(title).trim();
         return title;
@@ -159,7 +174,7 @@ public class FileEngine {
      * @param st stringa da usare
      * @return Striga senza tab
      */
-    private static String fromTabToSpace(String st){
+    public static String fromTabToSpace(String st){
         int tabIndex;
         do{
             tabIndex = st.indexOf('\t');

@@ -18,7 +18,7 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
     }
 
    @Override
-    public void insert(T element, String key) { //TODO riguardarlo, non mi fido
+    public void insert(T element, String key) { 
         Coppia[] temp = new Coppia[S.length + 1];
         if(S.length == 0){ //inserimento del primo elemento
             temp[0] = new Coppia(element, key);
@@ -99,17 +99,12 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
 
     @Override
     public T[] toArray() {
-        if(S.length == 0){
-            return null;
-        }
-        else
-        {
             T[] ris = (T[]) Array.newInstance(typeClass, S.length);
             for(int i = 0; i < S.length; i++){
                 ris[i] = (T) S[i].getData();
             }
             return ris;
-        }
+
     }
     
     /** Cerca un elemento nell'array e ne restituisce l'indice dov'è contenuto
@@ -120,7 +115,7 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
      * @param j l'indice massimo dell'array
      * @return l'indice della casella contenente la key o l'indice dove la key andrebbe inserita
      */
-    private int cerca(String key, int i, int j){ //TODO finire la ricerca dicotomica e implementarla
+    private int cerca(String key, int i, int j){ 
         if(S.length == 0 || i > j){
             return i;
         }

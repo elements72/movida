@@ -21,7 +21,7 @@ public class HeapSort {
 
     /** restituisce il valore massimo dell'array
      * 
-     * @param <T> Il tipo dell'array da passare come parametro
+     * @param <T> Il tipo dell'array passato come parametro
      * @param A array di tipo T
      * @return il valore massimo dell'array
      */
@@ -35,7 +35,7 @@ public class HeapSort {
 
     /** Rende un array un maxheap
      * 
-     * @param <T> Il tipo dell'array da passare come parametro
+     * @param <T> Il tipo dell'array passato come parametro
      * @param A array di tipo T
      * @param n l'ultimo indice valido dell'array
      * @param i l'indice dell'elemento che diventerà la radice
@@ -59,7 +59,7 @@ public class HeapSort {
 
     /** Rende un array un max-heap
      * 
-     * @param <T> Il tipo dell'array da passare come parametro
+     * @param <T> Il tipo dell'array passato come parametro
      * @param A array di tipo T
      * @param n l'ultimo indice valido dell'array
      * @param i l'indice dell'elemento che diventerà la radice
@@ -75,7 +75,7 @@ public class HeapSort {
 
     /** Cancella l'elemento massimo dall'array
      * 
-     * @param <T> Il tipo dell'array da passare come parametro
+     * @param <T> Il tipo dell'array passato come parametro
      * @param A array di tipo T
      * @param n l'ultimo indice valido dell'array
      * @param cla classe comparator

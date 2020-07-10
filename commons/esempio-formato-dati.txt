@@ -57,9 +57,3 @@ Year: 1993
 Director: Andrew Davis  	
 Cast: Harrison Ford, Tommy Lee Jones, Sela Ward 
 Votes: 256213
-
-Title: Pulp Fiction
-Year: 1994
-Director: Quentin Tarantino
-Cast: Samuel L. Jackson, Uma Thurman
-Votes:	1743616
