@@ -20,27 +20,31 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
    @Override
     public void insert(T element, String key) { //TODO riguardarlo, non mi fido
         Coppia[] temp = new Coppia[S.length + 1];
-        if(S.length == 0){ //caso del primo elemento
+        if(S.length == 0){ //inserimento del primo elemento
             temp[0] = new Coppia(element, key);
         } 
-        else if(cercaOmonimia(key) >= 0){
-            int i = cercaOmonimia(key);
-            S[i] = new Coppia(element, key);
-            return;
-        }
         else
         {
-            int i = 0, j = 0;
-            for(; j < S.length; i++, j++) //potrei renderlo un while a questo punto ..
+            int i = cerca(key, 0, S.length - 1);
+            if(i < S.length && key.compareToIgnoreCase(S[i].getKey()) == 0)
             {
-                if(i == j && key.compareToIgnoreCase(S[j].getKey()) <= 0){ //TODO fare ricerca dicotomica
-                    temp[i] = new Coppia(element, key);
-                    i++;
-                }
-                temp[i] = S[j];
+                S[i] = new Coppia(element, key);
+                return;
             }
-            if(i == j){ //nel caso la posizione da inserire la coppia sia la casella extra rispeto a S
-                temp[i] = new Coppia(element, key);
+            else
+            {
+                int t = 0, j = 0;
+                for(; j < S.length; t++, j++) //potrei renderlo un while a questo punto ..
+                {
+                    if(i == j){ //abbiamo raggiunto la casella dove va inserito il nuovo elemento
+                        temp[t] = new Coppia(element, key);
+                        t++;
+                    }
+                    temp[t] = S[j];
+                }
+                if(i == S.length){ //nel caso la posizione da inserire la coppia sia la casella extra rispeto a S
+                    temp[i] = new Coppia(element, key);
+                }
             }
         }
         S = temp;
@@ -108,6 +112,14 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
         }
     }
     
+    /** Cerca un elemento nell'array e ne restituisce l'indice dov'è contenuto
+     *  o l'indice dove andrebbe inserito
+     * 
+     * @param key la stringa che verrà cercata
+     * @param i l'indice minimo dell'array
+     * @param j l'indice massimo dell'array
+     * @return l'indice della casella contenente la key o l'indice dove la key andrebbe inserita
+     */
     private int cerca(String key, int i, int j){ //TODO finire la ricerca dicotomica e implementarla
         if(S.length == 0 || i > j){
             return i;
@@ -125,24 +137,4 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
         }
     }
 
-    /**
-     * Cerca se nell'array è presente un omonimia
-     * @param key Stringa sulla quale controllare il caso di un omonima
-     * @return indice della casella che ha come chiave il parametro dato, -1 se non ci sono omonimie
-     */
-    private int cercaOmonimia(String key){
-if(S.length == 0){
-            return -1;
-        }
-        else
-        {
-            for(int i = 0; i < S.length; i++)
-            {
-                if(key.compareToIgnoreCase(S[i].getKey()) == 0){
-                    return i;
-                }
-            }
-            return -1;
-        }
-    }
 }
