@@ -29,9 +29,9 @@ I dati all'interno del progetto sono mantenuti in due strutture distinte:
 * **actors** che mantiene le informazioni relative agli attori
 
 Si è deciso di mantenere per ogni attore i riferimenti ai film nei quali ha recitato/diretto,
-per mantenere tali riferimeti sono state adottate le medesime strutture  **movies** e **actors**. 
+per mantenere tali riferimeti sono state adottate le medesime strutture di **movies** e **actors**. 
 
-A discapito quindi di un maggior utilizzo di memoria e di una maggiore attenzione per quanto riguarda l'aggiornamento o l'aggiunta di nuovi dati abbiamo avuto la possibilità di eseguire operazioni come ```searchDirectedMovies(String title)``` e ```searchStarredMovies(String title)``` in modo immediato. Questo è stato possibile tramite la classe **Actor** che implementa la classe **Person** agiungendo strutture per salvare i film nei quali l'attore ha lavorato oltre che funzioni che gestiscono queste informazioni, come quelle citate sopra.
+A discapito quindi di un maggior utilizzo di memoria e di una maggiore attenzione per quanto riguarda l'aggiornamento o l'aggiunta di nuovi dati abbiamo avuto la possibilità di eseguire operazioni come ```searchDirectedMovies(String title)``` e ```searchStarredMovies(String title)``` in modo immediato. Questo è stato possibile tramite la classe **Actor** che implementa la classe **Person** aggiungendo le strutture per salvare i film nei quali l'attore ha lavorato oltre che i metodi per gestire queste informazioni, come quelle citate sopra.
 
 Le operazioni che invece richiedevano un ordinamento dei dati sono state soddisfate utilizzando dei **"Comparators"** che permettono di avere un unico codice per 
 l'ordinamento dei dati il quale cambia la sua politica di ordinamento in base al comparator che viene fornito. 
