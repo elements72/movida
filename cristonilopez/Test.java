@@ -62,6 +62,9 @@ public class Test {
         System.out.println("Team di:" + searchActor + Arrays.toString(core.getTeamOf(new Person(searchActor))) + "\n");
         System.out.println("Miglior collaborazione di:" + searchActor + Arrays.toString(core.maximizeCollaborationsInTheTeamOf(new Person(searchActor))) + "\n");
 
+        for (Movie movie : core.getAllMovies()) {
+            core.deleteMovieByTitle(movie.getTitle());
+        }
     }
         
     public static void stampa(Movie m){

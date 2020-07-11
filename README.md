@@ -7,7 +7,7 @@ Progetto svillupato da:
 
 **Antonio Lopez: 0000915711**
 
-**Davide Cristoni:0000880126**
+**Davide Cristoni: 0000880126**
 
 ## Introduzione:
 
@@ -28,13 +28,17 @@ I dati all'interno del progetto sono mantenuti in due strutture distinte:
 * **Actors** che mantiene le informazioni relative agli attori
 
 Si è deciso di mantenere per ogni attore i riferimenti ai film nei quali ha recitato/diretto,
-per mantenere tali riferimeti sono state adottate le medesime    strutture di Movies e Actors. 
+per mantenere tali riferimeti sono state adottate le medesime strutture di Movies e Actors. 
 
 A discapito quindi di un maggior utilizzo di memoria e di una maggiore attenzione per quanto riguarda l'aggiornamento o l'aggiunta di nuovi dati abbiamo avuto 
-la possibilità di eseguire operazioni come **"searchMoviesStarredBy", "searchMoviesStarredBy"**... in modo immediato.
+la possibilità di eseguire operazioni come **"searchMoviesStarred", "searchMoviesDirected"**... in modo immediato.
 
 Le operazioni che invece richiedevano un ordinamento dei dati sono state soddisfate utilizzando dei **"Comparators"** che permettono di avere un unico codice per 
 l'ordinamento dei dati il quale cambia la sua politica di ordinamento in base al comparator che viene fornito. 
+
+La funzione ```setMap(MapImplementation m)``` modifica la struttura dati da usare, inoltre cambia la struttura dati delle informazioni già caricate se presenti alcune.
+
+La funzione ```loadFromFile(FIle file )``` 
 
 
 ## Movida grafi:

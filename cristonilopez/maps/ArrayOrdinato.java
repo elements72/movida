@@ -20,7 +20,7 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
    @Override
     public void insert(T element, String key) { 
         Coppia[] temp = new Coppia[S.length + 1];
-        if(S.length == 0){ //inserimento del primo elemento
+        if(S.length == 0){                          //inserimento del primo elemento
             temp[0] = new Coppia(element, key);
         } 
         else
@@ -34,15 +34,15 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
             else
             {
                 int t = 0, j = 0;
-                for(; j < S.length; t++, j++) //potrei renderlo un while a questo punto ..
+                for(; j < S.length; t++, j++)       //potrei renderlo un while a questo punto ..
                 {
-                    if(i == j){ //abbiamo raggiunto la casella dove va inserito il nuovo elemento
+                    if(i == j){                     //abbiamo raggiunto la casella dove va inserito il nuovo elemento
                         temp[t] = new Coppia(element, key);
                         t++;
                     }
                     temp[t] = S[j];
                 }
-                if(i == S.length){ //nel caso la posizione da inserire la coppia sia la casella extra rispeto a S
+                if(i == S.length){                  //nel caso la posizione da inserire la coppia sia la casella extra rispeto a S
                     temp[i] = new Coppia(element, key);
                 }
             }
@@ -52,23 +52,33 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
 
     @Override
     public boolean delete(String key) {
-        if(S.length == 0){
+        if(count() == 0){
             return false;
+        }
+        else if(count() == 1){                              //se abbiamo un solo elemento
+            if(key.compareToIgnoreCase(S[0].getKey()) == 0) //e l'unico elemento è quello da cancellare
+            {
+                S = new Coppia[0];                          //inizializzo a zero l'array
+                return true;
+            }
+            else{
+                return false;                               //altrimenti ritorno false
+            }
         }
         else
         {
             Coppia[] temp = new Coppia[S.length - 1];
+            int t = cerca(key, 0, S.length - 1);
+            if(key.compareToIgnoreCase(S[t].getKey()) != 0){ //l'elemento non viene trovato nell'array
+                return false;                                //ritorno false
+            }
             int i = 0, j = 0;
-            for(; j < S.length; i++, j++) //e se facessi una ricerca dicotomica?
+            for(; j < S.length; i++, j++)
             {
-                if(key.compareToIgnoreCase(S[j].getKey()) == 0){ //trova l'elemento
+                if(t == j){                                  //la casella dove si trova l'elemento da cancellare
                     j++;
                 }
-                try{
-                temp[i] = S[j]; //se l'elemento non viene trovato, all'ultimo ciclo si genererà un eccezione
-                } catch(ArrayIndexOutOfBoundsException e){
-                    return false;
-                }
+                temp[i] = S[j];
             }
             S = temp;
             return true;
