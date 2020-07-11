@@ -3,6 +3,7 @@ package movida.cristonilopez;
 import java.io.File;
 import java.util.Arrays;
 
+import Albero.test;
 import movida.commons.*;
 
 public class Test {
@@ -12,30 +13,20 @@ public class Test {
         File f = new File("movida/commons/esempio-formato-dati.txt"); // cammino relativo
         core = new MovidaCore();
         core.loadFromFile(f);
-        //tests();    //Funzione con vari test
         File f1 = new File("movida/commons/esempio-formato-dati-2.txt");   //cammino relativo
         core.loadFromFile(f1);
         tests();    //Funzione con vari test
-        core.clear();
-        core.setMap(MapImplementation.ArrayOrdinato);
-        core.setSort(SortingAlgorithm.HeapSort);
-        System.out.println("array ordinato\n");
         core.loadFromFile(f);
-        //tests();    //Funzione con vari test
-        core.loadFromFile(f1);
-        core.setMap(MapImplementation.Alberi23);
-        tests();    //Funzione con vari test
+        tests();
         File fout = new File("movida/cristonilopez/esempio-scrittura-dati.txt");
         core.saveToFile(fout);
-        core.clear();
-        tests();
     }
 
     public static void tests(){
-        String searchActor = "Anne Hathaway";
-        String searchDirector = "Fabio il fruttivendolo";
-        String searchMovie = "pulp fiction";
-        String searchString = "Force";
+        String searchActor = "Harrison Ford";
+        String searchDirector = "Andre Davis";
+        String searchMovie = "";
+        String searchString = "Cape";
         Integer anno = new Integer(1997);
         int N = 20;
         // Tutti i test sulle varie funzioni, commentare se necessario o aggiungerne
