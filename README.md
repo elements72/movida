@@ -7,7 +7,7 @@ Progetto svillupato da:
 
 **Antonio Lopez: 0000915711**
 
-**Davide Cristoni:**
+**Davide Cristoni:0000880126**
 
 ## Introduzione:
 
