@@ -22,8 +22,11 @@ Due strutture dati classiche:
 * **Array Ordinato**
 
 Ci siamo avvalsi di git e github per la gestione delle versioni del codice.
+
 Le librerie presenti nel progetto appartengono a quelle standard di java e quindi non richiedono particolari operazioni per essere linkate ed installate.
-L'unica libreria "esterna" è la **asdlab** della quale sono presenti solo alcuni pacchetti, infatti abbiamo preferito evitare di portare l'intera libreria nel progetto abbiamo quindi incluso tra i file i sorgenti dei pacchetti che ci interessavano.
+
+L'unica libreria "esterna" è la **asdlab** della quale sono presenti solo alcuni pacchetti,
+infatti abbiamo preferito evitare di portare l'intera libreria nel progetto abbiamo quindi incluso tra i file i sorgenti dei pacchetti che ci interessavano.
 
 ## Movida parte principale:  
 I dati all'interno del progetto sono mantenuti in due strutture distinte:
