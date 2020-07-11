@@ -21,6 +21,7 @@ Due strutture dati classiche:
 * **Alberi 2-3**
 * **Array Ordinato**
 
+Ci siamo avvalsi di git e github per la gestione delle versioni del codice
 
 ## Movida parte principale:  
 I dati all'interno del progetto sono mantenuti in due strutture distinte:
@@ -49,15 +50,19 @@ Sono state usate le seguenti strutture per mantenere le informazioni necessarie:
 * GrafoLA (modulo della libreria asdlab) per avere una classe che gestisse le operazioni tipiche di un grafo
 
 Ogni volta avviene il caricamento di un film dalla funzione ```loadFromFile(FIle file)``` vengono create le collaborazioni tra gli attori di tale film attraverso ```createMovieCollaboration(Movie movie)``` distinguiamo due casi:
-*Esiste già una collaborazione: il nuovo film viene aggiunto ai film in cui hanno collaborato.
-*Non esiste collaborazione: viene creata una nuova collaborazione.
-Ad ogni attore corrisponde un **Nodo** e ad ogni collaborazione un **Arco** (x, y) che unisce due attori, la funzione
-```createCollaboration(Person a, Person b, Movie movie)``` si occupa di creare ed aggiornare nodi ed archi.
+* Esiste già una collaborazione: il nuovo film viene aggiunto ai film in cui hanno collaborato.
+* Non esiste collaborazione: viene creata una nuova collaborazione.
+
+Ad ogni attore corrisponde un **Nodo** e ad ogni collaborazione un **Arco** (x, y) che unisce due attori,
+la funzione```createCollaboration(Person a, Person b, Movie movie)``` si occupa di creare ed aggiornare nodi ed archi.
 La funzione di costo **w((x,y))** è definita dal metodo ```getScore()``` presenete in **collaboration**
 
-Nel caso in cui un film viene sovrascritto o eliminato attaverso ```deleteMovieByTitle(String title)``` è necessario aggiornare le collaborazioni tra gli attori, la funzione ```deleteCollaborationsOfMovie(Movie movie)``` si occupa prorpio di questo ed appoggiandosi su ```deleteCollaboration(Person a, Person b, Movie movie)``` elimina **movie** tra i film in cui hanno partecipato entrambi gli attori. Se risulta che la **collaboration** tra due attori non presenta film viene eliminata (e con essa anche l'arco associato), inoltre se un attore non presenta più collaborazioni viene rimosso il suo "nodo" corrispondente. Le collaborazioni vengono solamente create tra attori i direttori sono esclusi
+Nel caso in cui un film viene sovrascritto o eliminato attaverso ```deleteMovieByTitle(String title)``` è necessario aggiornare le collaborazioni tra gli attori, la funzione ```deleteCollaborationsOfMovie(Movie movie)``` si occupa proprio di questo ed appoggiandosi su ```deleteCollaboration(Person a, Person b, Movie movie)``` elimina **movie** tra i film in cui hanno partecipato entrambi gli attori. Se risulta che la **collaboration** tra due attori non presenta film viene eliminata (e con essa anche l'arco associato), inoltre se un attore non presenta più collaborazioni viene rimosso il suo "nodo" corrispondente. Le collaborazioni vengono solamente create tra attori i direttori sono esclusi
 
-Per rispondere alle due query "getTeamOf" e "maximizeCollaborationsInTheTeamOf" abbiamo usato:
-* Una BFS per ottenere il team di un attore
-* L'algoritmo di Prim per i MinimumSpanningTree modificando i pesi dei nostri archi e redendoli negativi,
-così facendo abbiamo infatti ottenuto un MaximumSpanningTree
+* Il metodo getDirectCollaboratorsOf(Person actor) è implementato considerando tutti i nodi **y** adiacenti ad **x**(nodo corrispondente ad actor).
+* Il metodo ```getTeamOf(Person actor)``` può essere implementato con un qualsiasi algortimo di visita di un grafo noi abbiamo scelto una BFS.
+* Il metodo ```maximizeCollaborationsInTheTeamOf(Person actor)``` richiede invece di implementare un algoritmo per un **MaximumSpanningTree**
+noi ci siamo rifatti all'algoritmo di Prim usando però la seguente funzione di costo:
+  * w'((x,y)) = -w((x,y))
+
+Abbiamo semplicemente considerato l'opposto del costo di un arco, ovviamente ciò è possibile in quanto sappiamo che tutti i costi associati ad un arco sono positivi. Con tale funzione di costo Prim ci fornisce un **MaximumSpanningTree**.
