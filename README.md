@@ -36,7 +36,7 @@ A discapito quindi di un maggior utilizzo di memoria e di una maggiore attenzion
 Le operazioni che invece richiedevano un ordinamento dei dati sono state soddisfate utilizzando dei **"Comparators"** che permettono di avere un unico codice per 
 l'ordinamento dei dati il quale cambia la sua politica di ordinamento in base al comparator che viene fornito. 
 
-La funzione ```setMap(MapImplementation m)``` modifica la struttura dati da usare, inoltre cambia la struttura dati delle informazioni già caricate se presenti alcune.
+La funzione ```setMap(MapImplementation m)``` modifica la struttura dati da usare, inoltre cambia la struttura dati delle informazioni già caricate.
 
 La funzione ```loadFromFile(FIle file )``` legge dati dal file passato come parametro e li aggiunge alle strutture dati. Questa funzione sfrutta una struttura di **Movie** d'appoggio per permettere di non caricare i dati nel caso di lettura di un file di formattazione sconosciuta. Una volta che la lettura è andata a buon fine, dalla struttura temporanea vengono estratte le modifiche da apportare sia a **movies** sia ad **actors** oltre che creare i nodi per le collaborazioni tra attori. Prima di aggiungere un film alla struttura dati principale viene controllato che non sia già presente; in quel caso le informazioni vengono aggiornate alla lettura più recente (il film viene sostituito nella struttura principale e il cast controllato in caso di nuovi partecipanti o persone rimosse). Le operazioni di vera e propria lettura da file sono gestite dalla classe **FileEngine** che, tramite i suoi metodi, estrae i dati dal documento txt, controllandone la formattazione. I dati estratti sono poi convertiti nei tipi o nelle strutture dati sfruttati dalla classe Movie.
 
