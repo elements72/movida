@@ -11,6 +11,8 @@ public class Test {
     public static void main(String[] args) {
         File f = new File("movida/commons/esempio-formato-dati.txt"); // cammino relativo
         core = new MovidaCore();
+        core.setMap(MapImplementation.ArrayOrdinato);
+        core.setSort(SortingAlgorithm.HeapSort);
         core.loadFromFile(f);
         File f1 = new File("movida/commons/esempio-formato-dati-2.txt");   //cammino relativo
         core.loadFromFile(f1);

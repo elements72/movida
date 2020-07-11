@@ -73,7 +73,7 @@ public class ArrayOrdinato<T> implements Dizionario<T> {
                 return false;                                //ritorno false
             }
             int i = 0, j = 0;
-            for(; j < S.length; i++, j++)
+            for(; j < S.length && i < temp.length; i++, j++)
             {
                 if(t == j){                                  //la casella dove si trova l'elemento da cancellare
                     j++;
