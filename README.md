@@ -48,14 +48,16 @@ Sono state usate le seguenti strutture per mantenere le informazioni necessarie:
 * Hash-Map(java generic) per mantenere i riferimenti ai nostri nodi.
 * GrafoLA (modulo della libreria asdlab) per avere una classe che gestisse le operazioni tipiche di un grafo
 
+Ogni volta avviene il caricamento di un film dalla funzione ```loadFromFile(FIle file)``` vengono create le collaborazioni tra gli attori di tale film attraverso ```createMovieCollaboration(Movie movie)``` distinguiamo due casi:
+*Esiste già una collaborazione: il nuovo film viene aggiunto ai film in cui hanno collaborato.
+*Non esiste collaborazione: viene creata una nuova collaborazione.
+Ad ogni attore corrisponde un **Nodo** e ad ogni collaborazione un **Arco** (x, y) che unisce due attori, la funzione
+```createCollaboration(Person a, Person b, Movie movie)``` si occupa di creare ed aggiornare nodi ed archi.
+La funzione di costo **w((x,y))** è definita dal metodo ```getScore()``` presenete in **collaboration**
+
+Nel caso in cui un film viene sovrascritto o eliminato attaverso ```deleteMovieByTitle(String title)``` è necessario aggiornare le collaborazioni tra gli attori, la funzione ```deleteCollaborationsOfMovie(Movie movie)``` si occupa prorpio di questo ed appoggiandosi su ```deleteCollaboration(Person a, Person b, Movie movie)``` elimina **movie** tra i film in cui hanno partecipato entrambi gli attori. Se risulta che la **collaboration** tra due attori non presenta film viene eliminata (e con essa anche l'arco associato), inoltre se un attore non presenta più collaborazioni viene rimosso il suo "nodo" corrispondente. Le collaborazioni vengono solamente create tra attori i direttori sono esclusi
+
 Per rispondere alle due query "getTeamOf" e "maximizeCollaborationsInTheTeamOf" abbiamo usato:
 * Una BFS per ottenere il team di un attore
 * L'algoritmo di Prim per i MinimumSpanningTree modificando i pesi dei nostri archi e redendoli negativi,
 così facendo abbiamo infatti ottenuto un MaximumSpanningTree
-
-La classe collaboration è stata modificata in modo tale da permettere di aggiungere, rimuovere, ricercare film.
-Ogni qualvolta vi è una collaborazione tra due attori A e B viene controllato se questi hanno già collaborato in altri film,
- se così fosse viene aggiunto il nuovo film tra quelli in cui hanno collaborato.
-
-Un arco **(x, y)** contiene il riferimento alla collaborazione tra l'attore x e l'attore y.
-Il suo "costo" è dato da "getScore" ovvero la media dei voti ricevuti dai film in cui hanno partecipato insieme. 
