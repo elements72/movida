@@ -44,10 +44,11 @@ La funzione ```loadFromFile(FIle file )``` legge dati dal file passato come para
 ## Movida grafi:
 
 Sono state usate le seguenti strutture per mantenere le informazioni necessarie:
-* Hash-Map(java generic) per mantenere i riferimenti ai nostri nodi.
-* GrafoLA (modulo della libreria asdlab) per avere una classe che gestisse le operazioni tipiche di un grafo
+* **Hash-Map**(java generic) per mantenere i riferimenti ai nostri nodi.
+* **GrafoLA** (modulo della libreria asdlab) per avere una classe che gestisse le operazioni tipiche di un grafo.
+* **DHeap** (modulo della libreria asdlab) implementazione di una coda con priorità usata in ```maximizeCollaborationsInTheTeamOf(Person actor)```.
 
-Ogni volta avviene il caricamento di un film dalla funzione ```loadFromFile(FIle file)``` vengono create le collaborazioni tra gli attori di tale film attraverso ```createMovieCollaboration(Movie movie)``` distinguiamo due casi:
+Ogni volta che avviene il caricamento di un film dalla funzione ```loadFromFile(FIle file)``` vengono create le collaborazioni tra gli attori di tale film attraverso ```createMovieCollaboration(Movie movie)```, distinguiamo due casi:
 * Esiste già una collaborazione: il nuovo film viene aggiunto ai film in cui hanno collaborato.
 * Non esiste collaborazione: viene creata una nuova collaborazione.
 
@@ -56,6 +57,7 @@ la funzione```createCollaboration(Person a, Person b, Movie movie)``` si occupa 
 La funzione di costo **w((x,y))** è definita dal metodo ```getScore()``` presenete in **collaboration**
 
 Nel caso in cui un film viene sovrascritto o eliminato attaverso ```deleteMovieByTitle(String title)``` è necessario aggiornare le collaborazioni tra gli attori, la funzione ```deleteCollaborationsOfMovie(Movie movie)``` si occupa proprio di questo ed appoggiandosi su ```deleteCollaboration(Person a, Person b, Movie movie)``` elimina **movie** tra i film in cui hanno partecipato entrambi gli attori. Se risulta che la **collaboration** tra due attori non presenta film viene eliminata (e con essa anche l'arco associato), inoltre se un attore non presenta più collaborazioni viene rimosso il suo "nodo" corrispondente. Le collaborazioni vengono solamente create tra attori i direttori sono esclusi
+La classe **Collaboration** è stata modificata aggiungendo tutti i metodi necessari per la rimozione e l'aggiunta di film.
 
 * Il metodo getDirectCollaboratorsOf(Person actor) è implementato considerando tutti i nodi **y** adiacenti ad **x**(nodo corrispondente ad actor).
 * Il metodo ```getTeamOf(Person actor)``` può essere implementato con un qualsiasi algortimo di visita di un grafo noi abbiamo scelto una BFS.
