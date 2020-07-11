@@ -188,16 +188,16 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
             Movie oldMovie = movies.search(temp.getTitle());
             if(oldMovie != null)
             {
-                for(Person a: oldMovie.getCast()) //controlo se un attore non fa più farte del cast e nel caso lo rimuovo
+                Person[] oldCast =  oldMovie.getCast();
+                for(int i = 0; i < oldCast.length; i++) //controlo se un attore non fa più farte del cast e nel caso lo rimuovo
                 {
-                    Actor tempActor = (Actor)a;
-                    if(((Actor) a).searchStarredMovie(oldMovie.getTitle()) == oldMovie){    //Se il riferimento al film non è stato modificato 
+                    Actor tempActor = (Actor)oldCast[i];
+                    if(((Actor) oldCast[i]).searchStarredMovie(oldMovie.getTitle()) == oldMovie){    //Se il riferimento al film non è stato modificato 
                         tempActor.deleteMoviesStarred(oldMovie.getTitle());                 //L'attore non è presente nel nuovo cast
-                        for (Person b : oldMovie.getCast()) {
-                            if(b != a)                               //Rimuoviamo le sue collaborazioni
-                                deleteCollaboration(a, b, oldMovie);
-                        }
                         tryDeleteActor(tempActor);
+                    }
+                    for(int j = i+1; j < oldCast.length; j++) {
+                             deleteCollaboration(oldCast[i], oldCast[j], oldMovie);
                     }
                 }
                     if(oldMovie.getDirector().getName().compareTo(director.getName()) != 0){
@@ -322,7 +322,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
      * @param b
      * @param movie
      */
-    protected void deleteCollaboration(Person a, Person b, Movie movie){
+    private void deleteCollaboration(Person a, Person b, Movie movie){
         Nodo nodoA = nodi.get(a.getName().toLowerCase()); // Cerchiamo i nostri nodi nella hash map
         Nodo nodoB = nodi.get(b.getName().toLowerCase());
         Arco arcoAB = collaborations.sonoAdiacenti(nodoA, nodoB); // Ricerchiamo i nostri archi
@@ -347,7 +347,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
      * Il metodo elimina tutte le collaborazioni tra gli attori di un film
      * @param movie
      */
-    protected void deleteCollaborationsOfMovie(Movie movie){
+    private void deleteCollaborationsOfMovie(Movie movie){
         Person[] cast = movie.getCast();
         for (int i = 0; i < cast.length-1; i++) {
             for (int j = i+1; j < cast.length; j++) {
@@ -456,7 +456,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
      * @param c Comparator
      * @return Array di lunghezza N ordinato secondo <code>c</code>
      */
-    protected <T> T[] ordina(T[] A, Integer N, Comparator<T> c) {
+    private <T> T[] ordina(T[] A, Integer N, Comparator<T> c) {
         if (N > A.length || N < 0) // Se N è maggiore del numero di film a disposizione o un numero negativo, andiamo ad elencarli tutti
             N = A.length;
         T[] most;
@@ -499,7 +499,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
   * 
   * @param movie film di cui si vogliono creare le collaborazioni
   */
-    protected void createMovieCollaboration(Movie movie){
+    private void createMovieCollaboration(Movie movie){
         Person[] cast = movie.getCast();
         for (int i = 0; i < cast.length - 1; i++) { // Ciclo su tutte le possibili coppie
             for (int j = i + 1; j < cast.length; j++) {
@@ -518,7 +518,7 @@ public class MovidaCore implements IMovidaDB, IMovidaConfig, IMovidaSearch, IMov
      * @param b
      * @param movie
      */
-    protected void createCollaboration(Person a, Person b, Movie movie){
+    private void createCollaboration(Person a, Person b, Movie movie){
         boolean newCollabF = false;
         Nodo nodoA = nodi.get(a.getName().toLowerCase());     //Cerchiamo i nostri nodi nella hash map
         Nodo nodoB = nodi.get(b.getName().toLowerCase());

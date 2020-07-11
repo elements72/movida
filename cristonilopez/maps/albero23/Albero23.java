@@ -118,7 +118,7 @@ public class Albero23<T> implements Dizionario<T>{
      * Viene poi aggiunto al padre del nodo splittato, la chiave usata nell'aggiunta è quella del massimo valore presente sotto tale nodo
      * @param nodo
      */
-    protected void split(Nodo23 nodo){
+    private void split(Nodo23 nodo){
         //Creo il nuovo nodo
         Nodo23 nodoSplit = new Nodo23();    //Nel nostro nuovo nodo andiamo sempre a porre la chiave e i due sottoalberi minori
         nodoSplit.addChild(nodo.figli[0]);  //Aggiungiamo due figli al nuovo nodo
@@ -146,7 +146,7 @@ public class Albero23<T> implements Dizionario<T>{
      * @param nodo
      */
 
-    protected void fuse(Nodo23 nodo){
+    private void fuse(Nodo23 nodo){
         Nodo23 rb = nodo.rightBrother();            //Fratello destro
         Nodo23 lb = nodo.leftBrother();             //Fratello sinistro
         if(rb != null && rb.grado() == 3 ){         //Controllo che il fratello destro abbia abbastanza nodi per eseguire unos cambio
@@ -182,7 +182,7 @@ public class Albero23<T> implements Dizionario<T>{
      * @param key
      * @return Padre della nuova foglia
      */
-    protected Nodo23 searchPosition(String key){
+    private Nodo23 searchPosition(String key){
         Nodo23 padre =  ((Nodo23)radice);
         Nodo tmp = ((Nodo23) radice);
         while(tmp!=null && !tmp.isLeaf()){
@@ -216,7 +216,7 @@ public class Albero23<T> implements Dizionario<T>{
      * @param oldKey chiave da sostituire
      * @param newKey nuova chiave
      */
-    protected void fixKeys(Nodo23 nodo, String oldKey, String newKey){
+    private void fixKeys(Nodo23 nodo, String oldKey, String newKey){
         if(nodo == null)
             return;
         else{
