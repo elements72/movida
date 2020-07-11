@@ -28,7 +28,7 @@ I dati all'interno del progetto sono mantenuti in due strutture distinte:
 * **Actors** che mantiene le informazioni relative agli attori
 
 Si è deciso di mantenere per ogni attore i riferimenti ai film nei quali ha recitato/diretto,
-per mantenere tali riferimeti sono state adottate le medesime    strutture di Movies e Actors. 
+per mantenere tali riferimeti sono state adottate le medesime strutture di Movies e Actors. 
 
 A discapito quindi di un maggior utilizzo di memoria e di una maggiore attenzione per quanto riguarda l'aggiornamento o l'aggiunta di nuovi dati abbiamo avuto 
 la possibilità di eseguire operazioni come **"searchMoviesStarredBy", "searchMoviesStarredBy"**... in modo immediato.
