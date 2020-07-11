@@ -16,7 +16,6 @@ public class HeapSort {
             d--;
             i++;
         }
-        System.out.println(i+"<-i N->"+N);
     }
 
     /** restituisce il valore massimo dell'array
