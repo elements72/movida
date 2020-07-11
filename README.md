@@ -43,8 +43,6 @@ La funzione ```loadFromFile(FIle file )``` legge dati dal file passato come para
 
 ## Movida grafi:
 
-Nella parte riguardante l'estensione grafi del progetto movida ogni attore è visto come un nodo di un grafo ed ogni arco è una collaborazione.
-
 Sono state usate le seguenti strutture per mantenere le informazioni necessarie:
 * Hash-Map(java generic) per mantenere i riferimenti ai nostri nodi.
 * GrafoLA (modulo della libreria asdlab) per avere una classe che gestisse le operazioni tipiche di un grafo
